@@ -43,7 +43,7 @@ export const GeneralData = () => {
             {
                 titulo: "Telefones",
                 name: "telefones",
-                tamanho: "col-span-12 lg:col-span-2",
+                tamanho: "col-span-12 lg:col-span-4",
                 tipo: "texto_longo",
                 max: 46,
             },
@@ -52,7 +52,7 @@ export const GeneralData = () => {
             {
                 titulo: "CEP",
                 name: "cep",
-                tamanho: "col-span-12 lg:col-span-3",
+                tamanho: "col-span-12 lg:col-span-2",
                 tipo: "texto",
                 max: 9,
             },
@@ -63,19 +63,26 @@ export const GeneralData = () => {
                 tipo: "texto",
                 max: 200,
             },
+            {
+                titulo: "Link Loja Virtual",
+                name: "link_mapa",
+                tamanho: "col-span-12 lg:col-span-3",
+                tipo: "texto",
+                max: 200,
+            },
         ],
         [
             {
                 titulo: "Instagram",
                 name: "instagram",
-                tamanho: "col-span-12 lg:col-span-3",
+                tamanho: "col-span-12 lg:col-span-4",
                 tipo: "texto",
                 max: 128,
             },
             {
                 titulo: "Facebook",
                 name: "facebook",
-                tamanho: "col-span-12 lg:col-span-3",
+                tamanho: "col-span-12 lg:col-span-4",
                 tipo: "texto",
                 max: 128,
             },
