@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\Manager\PostGeneralDataRequest;
 
-// use App\Models\DadosGerais;
+use App\Models\DadosGerais;
 use App\Models\Slide;
 
 class HomeController extends Controller
@@ -18,10 +17,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $idioma = inertia()->getShared('idioma');
 
-        // $dadosGerais = DadosGerais::first();
+        $dadosGerais = DadosGerais::first();
 
         $slides = Slide::query()
             ->where([
@@ -32,13 +32,13 @@ class HomeController extends Controller
                     $q->whereHas('idiomas', function ($r) {
                         $r->Where('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->orderBy('ordem', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($slide) {
+            ->map(function ($slide) {
                 return [
                     'id' => $slide->id,
                     'visivel' => $slide->visivel,
@@ -47,11 +47,11 @@ class HomeController extends Controller
             });
 
         return Inertia::render('Manager/Home/index', [
-            // 'dadosGerais' => $dadosGerais,
+            'dadosGerais' => $dadosGerais,
             'slides' => $slides
         ]);
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -60,19 +60,17 @@ class HomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizarInfo(PostGeneralDataRequest $request) {
+    public function atualizarInfo(PostGeneralDataRequest $request)
+    {
         if ($request->ajax()) {
             $dados_gerais = DadosGerais::first();
 
             $dados_gerais->endereco = $request->endereco;
             $dados_gerais->cep = $request->cep;
-            $dados_gerais->cidade = $request->cidade;
-            $dados_gerais->telefone = $request->telefone;
-            $dados_gerais->whatsapp = $request->whatsapp;
-            $dados_gerais->email = $request->email;
+            $dados_gerais->telefones = $request->telefones;
             $dados_gerais->instagram = $request->instagram ? $request->instagram : null;
             $dados_gerais->facebook = $request->facebook ? $request->facebook : null;
-            $dados_gerais->linkedin = $request->linkedin ? $request->linkedin : null;
+            $dados_gerais->link_mapa = $request->link_mapa;
 
             $response = $dados_gerais->save();
 
