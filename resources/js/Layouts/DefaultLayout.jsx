@@ -286,7 +286,7 @@ const DefaultLayout = ({ children }) => {
                                                 </li>
                                                 <li className="relative mt-3 2xl:mt-5">
                                                     <a
-                                                        href="https://loja.pizzato.net/blog"
+                                                        href={`${dados_gerais.link_loja}/blog`}
                                                         className="relative text-2xl 2xl:text-3xl text-white font-light transition-all hover:font-bold hover:text-secondary"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -296,7 +296,7 @@ const DefaultLayout = ({ children }) => {
                                                 </li>
                                                 <li className="relative mt-3 2xl:mt-5">
                                                     <a
-                                                        href="https://loja.pizzato.net/"
+                                                        href={dados_gerais.link_loja}
                                                         className="relative text-2xl 2xl:text-3xl text-white font-light transition-all hover:font-bold hover:text-secondary"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -502,7 +502,7 @@ const DefaultLayout = ({ children }) => {
 
                                     <li>
                                         <a
-                                            href="https://loja.pizzato.net/"
+                                            href={dados_gerais.link_loja}
                                             className="text-white text-sm font-medium uppercase transition-all opacity-100 hover:opacity-70"
                                             target="_blank"
                                         >
