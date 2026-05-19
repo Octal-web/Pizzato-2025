@@ -71,6 +71,7 @@ class HomeController extends Controller
             $dados_gerais->instagram = $request->instagram ? $request->instagram : null;
             $dados_gerais->facebook = $request->facebook ? $request->facebook : null;
             $dados_gerais->link_mapa = $request->link_mapa;
+            $dados_gerais->link_loja = $request->link_loja;
 
             $response = $dados_gerais->save();
 

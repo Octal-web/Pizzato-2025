@@ -28,6 +28,7 @@ class PostGeneralDataRequest extends FormRequest
             'instagram' => 'nullable|url',
             'facebook' => 'nullable|url',
             'link_mapa' => 'required|url',
+            'link_loja' => 'required|url',
         ];
     }
 
@@ -48,6 +49,8 @@ class PostGeneralDataRequest extends FormRequest
             'facebook.url' => 'Por favor, informe um link de facebook válido.',
             'link_mapa.url' => 'Por favor, informe um link do Google Maps válido.',
             'link_mapa.required' => 'Por favor, informe o link para o Google Maps.',
+            'link_loja.url' => 'Por favor, informe um link para loja virtual.',
+            'link_loja.required' => 'Por favor, informe o link para a loja virtual.',
         ];
     }
 }
