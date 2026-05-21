@@ -191,6 +191,8 @@ Gere a chave da aplicação:
 php artisan key:generate
 ```
 
+Configure o banco de dados SQL e preencha com o acesso no .env
+
 5. Rode o projeto:
 ```bash
 npm run dev
