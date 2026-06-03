@@ -13,6 +13,7 @@ O projeto consistiu no desenvolvimento de um site institucional moderno e respon
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Arquitetura do Projeto](#arquitetura-do-projeto)
 - [Como Executar o Projeto](#como-executar-o-projeto)
+- [Documentação](#documentacao)
 
 ---
 
@@ -198,5 +199,11 @@ Configure o banco de dados SQL e preencha com o acesso no .env
 npm run dev
 php artisan serve
 ```
+
+<h2 id="documentacao">Documentação:</h2>
+Este README apresenta uma visão geral do projeto.
+
+Para uma documentação completa, incluindo arquitetura, instalação detalhada, páginas, fluxo, controllers e componentes, acesse a Wiki do projeto:
+[Wiki do projeto](https://github.com/Octal-web/Pizzato-2025/wiki)
 
 
