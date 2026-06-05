@@ -128,7 +128,7 @@ export const LinesBanner = ({ current, lines, onChangeSlug }) => {
                             href={route('Produtos.index')} 
                             className="inline-block font-secondary px-6 py-1 md:py-2 text-xs md:text-sm text-white uppercase tracking-wide opacity-70 border border-white transition-all hover:opacity-90 hover:bg-white/10"
                         >
-                            Ver mais vinhos
+                            {lang('verMaisVinhos')}
                         </Link>
                     </div>
                 </nav>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
+import { useLang } from '@/hooks/useLang';
 
 const setCookie = (name, value, days) => {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -16,6 +17,8 @@ const setCookie = (name, value, days) => {
 export const CookieModal = ({ acceptCookies, visible }) => {
     const [showModal, setShowModal] = useState(true);
     const [isFadingOut, setIsFadingOut] = useState(false);
+
+    const lang = useLang();
 
     useEffect(() => {
         const notifyCookies = getCookie('notify-cookies');
@@ -49,15 +52,15 @@ export const CookieModal = ({ acceptCookies, visible }) => {
                         <div className="bg-white px-6 md:px-8 py-6 shadow-md mb-10">
                             <div className="font-secondary tracking-tight sm:tracking-normal text-sm sm:text-base">
                                 <p>
-                                Utilizamos cookies para oferecer uma melhor experiência, melhorar o desempenho, analisar como você interage em nosso site e personalizar conteúdo. Para mais informações acesse nossa{' '} 
-                                <Link href={route('Politicas.privacidade')} className="underline">política de privacidade</Link>.
+                                {lang('cookie')}{' '} 
+                                <Link href={route('Politicas.privacidade')} className="underline">{lang('cookiePolitica')}</Link>.
                                 </p>
                             </div>
                             <button
                                 onClick={handleAcceptCookies}
                                 className="font-secondary w-full sm:w-fit bg-primary text-sm sm:text-base text-white md:ml-auto px-6 mt-6 whitespace-nowrap block text-center h-10 sm:h-12 2xl:h-14 flex items-center justify-center tracking-wide uppercase transition-all hover:bg-opacity-75"
                             >
-                            Aceitar todos os cookies
+                            {lang('aceitarCookies')}
                           </button>
                         </div>
                     </div>
