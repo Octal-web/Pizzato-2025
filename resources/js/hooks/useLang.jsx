@@ -2,6 +2,13 @@ import { usePage } from "@inertiajs/react";
 
 const translations = {
     pt: {
+        503: "Desculpe, estamos em manutenção. Volte em breve.",
+        500: "Ops, algo deu errado em nossos servidores.",
+        404: (url) =>
+            `Desculpe, a página que você está procurando "<strong>${url}</strong>" não foi encontrada.`,
+        403: (url) =>
+            `Você não tem permissão para acessar esta página: <strong>${url}</strong>.`,
+        back: "Voltar",
         home: "Home",
         sobre: "Sobre",
         nossosVinhos: "Nossos Vinhos",
@@ -52,8 +59,18 @@ const translations = {
         fichaTecnica: "Ficha Técnica",
         colheitas: "Colheitas",
         areaRestrita: "Área Restrita",
+        cookie: "Utilizamos cookies para oferecer uma melhor experiência, melhorar o desempenho, analisar como você interage em nosso site e personalizar conteúdo. Para mais informações acesse nossa",
+        cookiePolitica: "política de privacidade",
+        aceitarCookies: "Aceitar todos os cookies",
     },
     en: {
+        503: "Sorry, we are doing some maintenance. Please check back soon.",
+        500: "Oops, something went wrong on our servers.",
+        404: (url) =>
+            `Sorry, the page you are looking for "<strong>${url}</strong>" could not be found.`,
+        403: (url) =>
+            `Sorry, you are forbidden from accessing this page: <strong>${url}</strong>.`,
+        back: "Back",
         home: "Home",
         sobre: "About",
         nossosVinhos: "Our Wines",
@@ -104,11 +121,22 @@ const translations = {
         fichaTecnica: "Technical Sheet",
         colheitas: "Harvests",
         areaRestrita: "Restrict Area",
+        cookie: "We use cookies to provide a better experience, improve performance, analyze how you interact with our site, and personalize content. For more information, please visit our",
+        cookiePolitica: "privacy policy",
+        aceitarCookies: "Accept all cookies",
     },
 };
 
 export function useLang() {
-    const { idioma } = usePage().props;
+    const { language, idioma } = usePage().props;
 
-    return (key) => translations[idioma]?.[key] || key;
+    return (key, value = null) => {
+        const translation = translations[language ?? idioma]?.[String(key)];
+
+        if (typeof translation === "function") {
+            return translation(value);
+        }
+
+        return translation || key;
+    };
 }
