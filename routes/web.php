@@ -12,6 +12,7 @@ use App\Http\Controllers\EnoturismoController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PoliticasController;
 use App\Http\Controllers\TokensController;
+use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Manager\UsuariosController;
 use App\Http\Controllers\Manager\ConteudosController as ManagerConteudosController;
@@ -50,6 +51,8 @@ use App\Http\Controllers\Intranet\MembrosController as IntranetMembrosController
 
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('Home.index');
+
+    Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('Sitemap.index');
 
     Route::post('/newsletter/enviar', [NewsletterController::class, 'enviar'])->name('Newsletter.enviar');
 
