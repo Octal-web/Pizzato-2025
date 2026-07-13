@@ -115,68 +115,96 @@ const DefaultLayout = ({ children }) => {
         return () => clearTimeout(timer);
     }, [notifyCookie, trackingEnabled]);
 
-    const phones = dados_gerais.telefones.split("\n");
-
-    function formatPhone(number) {
-        const clean = number.replace(/\D/g, "");
-
-        const withoutDDI = clean.replace(/^55/, "");
-
-        const ddd = withoutDDI.slice(0, 2);
-        const phone = withoutDDI.slice(2);
-
-        if (phone.length === 9) {
-            return `(${ddd}) ${phone.slice(0, 5)}-${phone.slice(5)}`;
-        } else {
-            return `(${ddd}) ${phone.slice(0, 4)}-${phone.slice(4)}`;
-        }
-    }
-
     return (
         <>
             <Head>
                 <title>{pagina.titulo}</title>
                 <meta name="description" content={pagina.descricao} />
 
-                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:card" content="summary"/>
 
                 <meta property="og:url" content={window.location.pathname} />
-                <meta property="og:type" content="website" />
-                <meta
-                    property="og:title"
-                    content={pagina.tituloCompartilhamento}
-                />
-                <meta
-                    property="og:description"
-                    content={pagina.descricaoCompartilhamento}
-                />
+                <meta property="og:type" content="website"/>
+                <meta property="og:title" content={pagina.tituloCompartilhamento} />
+                <meta property="og:description" content={pagina.descricaoCompartilhamento} />
                 <meta property="og:image" content={pagina.imagem.endereco} />
                 <meta property="og:image:type" content={pagina.imagem.tipo} />
-                <meta
-                    property="og:image:width"
-                    content={pagina.imagem.largura}
-                />
-                <meta
-                    property="og:image:height"
-                    content={pagina.imagem.altura}
-                />
+                <meta property="og:image:width" content={pagina.imagem.largura} />
+                <meta property="og:image:height" content={pagina.imagem.altura} />
 
-                <meta name="robots" content="index, follow" />
+                <meta name="robots" content="index, follow"/>
                 <meta name="author" content="Octal Web" />
+
+                {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content={siteName} />
+                <meta property="og:locale" content="pt_BR" />
+                <meta property="og:title" content={sharingTitle} />
+                <meta
+                    property="og:description"
+                    content={sharingDescription}
+                />
+                {pageImage && <meta property="og:image" content={pageImage} />}
+                {pageImage && (
+                    <meta property="og:image:secure_url" content={pageImage} />
+                )}
+                {pagina?.imagem?.tipo && (
+                    <meta
+                        property="og:image:type"
+                        content={pagina.imagem.tipo}
+                    />
+                )}
+                {pagina?.imagem?.largura && (
+                    <meta
+                        property="og:image:width"
+                        content={pagina.imagem.largura}
+                    />
+                )}
+                {pagina?.imagem?.altura && (
+                    <meta
+                        property="og:image:height"
+                        content={pagina.imagem.altura}
+                    />
+                )}
+                {pageImage && (
+                    <meta property="og:image:alt" content={sharingTitle} />
+                )}
+
+                <meta
+                    name="twitter:card"
+                    content={pageImage ? "summary_large_image" : "summary"}
+                />
+                <meta name="twitter:title" content={sharingTitle} />
+                <meta
+                    name="twitter:description"
+                    content={sharingDescription}
+                />
+                {pageImage && <meta name="twitter:image" content={pageImage} />}
+                {pageImage && (
+                    <meta name="twitter:image:alt" content={sharingTitle} />
+                )}
+
+                {structuredData.map((schema, index) => (
+                    <script
+                        key={index}
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(schema),
+                        }}
+                    />
+                ))}
 
                 <link rel="icon" href={`/favicon.ico`} type="image/x-icon" />
             </Head>
-            <header
-                className={`header absolute top-0 left-0 right-0 z-[99] text-white${["Cases", "Politica", "Politicas"].includes(controller) || ["produto"].includes(action) ? " bg-white" : ""}`}
-            >
+            <header className={`header absolute top-0 left-0 right-0 z-[99] text-white${['Cases', 'Politica', 'Politicas'].includes(controller) || ['produto'].includes(action) ? ' bg-white' : ''}`}>
                 <div className="container max-w-large">
                     <div className="flex items-center justify-between">
                         <div className="grid grid-cols-3 items-center w-full my-8 xl:my-10 2xl:my-16">
                             <button className="menu-link" onClick={toggleMenu}>
                                 <div className="flex items-center">
-                                    <div
-                                        className={`w-10 sm:w-12${["Cases", "Politica", "Politicas"].includes(controller) || ["produto"].includes(action) ? " invert" : ""}`}
-                                    >
+                                    <div className={`w-10 sm:w-12${['Cases', 'Politica', 'Politicas'].includes(controller) || ['produto'].includes(action) ? ' invert' : ''}`}>
                                         <div className="menu-bar bg-white h-[3px] w-8 sm:w-9 transition-all ease-in-out duration-300"></div>
                                         <div className="menu-bar bg-white h-[3px] w-8 sm:w-9 transition-all ease-in-out duration-300 mt-1.5 sm:mt-2"></div>
                                         <div className="menu-bar bg-white h-[3px] w-8 sm:w-9 transition-all ease-in-out duration-300 mt-1.5 sm:mt-2"></div>
@@ -185,25 +213,12 @@ const DefaultLayout = ({ children }) => {
                             </button>
 
                             <h1 className="flex items-center">
-                                <Link
-                                    href={route("Home.index")}
-                                    className="flex items-center mx-auto"
-                                >
-                                    <img
-                                        src={`/site/img/logo.png`}
-                                        alt="Logo"
-                                        className={`block w-44 2xl:w-auto ${["Cases", "Politica", "Politicas"].includes(controller) || ["produto"].includes(action) ? " invert" : ""}`}
-                                    />
+                                <Link href={route('Home.index')} className="flex items-center mx-auto">
+                                    <img src={`/site/img/logo.png`} alt="Logo" className={`block w-44 2xl:w-auto ${['Cases', 'Politica', 'Politicas'].includes(controller) || ['produto'].includes(action) ? ' invert' : ''}`} />
                                 </Link>
                             </h1>
 
-                            <LanguageSwitcher
-                                isReverse={
-                                    ["Cases", "Politicas"].includes(
-                                        controller,
-                                    ) || ["produto"].includes(action)
-                                }
-                            />
+                            <LanguageSwitcher isReverse={['Cases', 'Politicas'].includes(controller) || ['produto'].includes(action)} />
 
                             <div
                                 className={`fixed top-0 left-0 z-[3] bg-black w-full h-full transition-opacity duration-500 ${isMenuOpen ? "opacity-50 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
@@ -426,9 +441,7 @@ const DefaultLayout = ({ children }) => {
                 </div>
             </header>
 
-            <main
-                className={`overflow-hidden${["Cases", "Politicas"].includes(controller) || ["produto"].includes(action) ? " pt-[85px] md:pt-[110px] min-[1441px]:pt-[160px]" : ""}`}
-            >
+            <main className={`overflow-hidden${['Cases', 'Politicas'].includes(controller) || ['produto'].includes(action) ? ' pt-[85px] md:pt-[110px] min-[1441px]:pt-[160px]' : ''}`}>
                 {children}
             </main>
 
@@ -573,23 +586,9 @@ const DefaultLayout = ({ children }) => {
                                             </li>
                                         </ul>
 
-                                        <Link
-                                            href={route(
-                                                "Politicas.privacidade",
-                                            )}
-                                            className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right"
-                                        >
-                                            {lang("politicaPrivacidade")}
-                                        </Link>
-
-                                        <a
-                                            href="https://pedidos.pizzato.net:8081/pedidos4/login.asp"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right"
-                                        >
-                                            {lang("areaRestrita")}
-                                        </a>
+                                        <Link href={route('Politicas.privacidade')} className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('politicaPrivacidade')}</Link>
+                                        
+                                        <a href="https://pedidos.pizzato.net:8081/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
                                     </div>
                                 </div>
                             </div>
@@ -627,21 +626,9 @@ const DefaultLayout = ({ children }) => {
                                 </li>
                             </ul>
 
-                            <Link
-                                href={route("Politicas.privacidade")}
-                                className="block mb-2 text-white text-xs text-right transition-all opacity-50 hover:opacity-100"
-                            >
-                                {lang("politicaPrivacidade")}
-                            </Link>
-
-                            <a
-                                href="https://pedidos.pizzato.net:8081/pedidos4/login.asp"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block mb-5 text-white text-xs text-right transition-all opacity-50 hover:opacity-100 max-md:text-right"
-                            >
-                                {lang("areaRestrita")}
-                            </a>
+                            <Link href={route('Politicas.privacidade')} className="block mb-2 text-white text-xs text-right transition-all opacity-50 hover:opacity-100">{lang('politicaPrivacidade')}</Link>
+                            
+                            <a href="https://pedidos.pizzato.net:8081/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs text-right transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
                         </div>
                     </div>
                 </div>

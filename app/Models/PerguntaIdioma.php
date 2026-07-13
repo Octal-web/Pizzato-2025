@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PerguntaIdioma extends Model
-{
+class PerguntaIdioma extends Model {
     protected $table = 'perguntas_idiomas';
-
+    
     const CREATED_AT = 'criado';
     const UPDATED_AT = 'modificado';
 

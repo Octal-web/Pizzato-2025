@@ -57,14 +57,14 @@ export const HomeVideoSlides = ({ slides }) => {
                     {slides.map((slide, index) => 
                         <SwiperSlide key={index}>
                             <div className="">
-                                <img src={slide.imagem} className="transition-all w-full aspect-[5/6] object-cover" />
+                                <img src={slide.imagem} alt={`Imagem ${index + 1}`} className="transition-all w-full aspect-[5/6] object-cover" />
                             </div>
                         </SwiperSlide>
                     )}
                     {slides.map((slide, index) => 
                         <SwiperSlide key={index}>
                             <div className="">
-                                <img src={slide.imagem} className="transition-all w-full aspect-[5/6] object-cover" />
+                                <img src={slide.imagem} alt={`Imagem ${index + slides.length}`} className="transition-all w-full aspect-[5/6] object-cover" />
                             </div>
                         </SwiperSlide>
                     )}
@@ -72,13 +72,13 @@ export const HomeVideoSlides = ({ slides }) => {
 
                     <button
                         ref={prevButtonRef}
-                        className="absolute top-1/2 hidden -translate-y-1/2 left-0 z-[10] group w-16 2xl:w-20 h-16 2xl:h-20 flex items-center justify-center bg-white rounded-full shadow-md transition ease-out duration-200 disabled:opacity-60 hover:bg-secondary"
+                        className="absolute top-1/2 hidden -translate-y-1/2 left-0 z-[10] group w-16 2xl:w-20 h-16 2xl:h-20 max-md:flex items-center justify-center bg-white rounded-full shadow-md transition ease-out duration-200 disabled:opacity-60 hover:bg-secondary"
                     >
                         <ArrowIcon className="fill-black opacity-30 rotate-180 transition-all group-hover:opacity-100 group-hover:fill-white" />
                     </button>
                     <button
                         ref={nextButtonRef}
-                        className="absolute top-1/2 hidden -translate-y-1/2 right-0 z-[10] group w-16 2xl:w-20 h-16 2xl:h-20 flex items-center justify-center bg-white rounded-full shadow-md transition ease-out duration-200 disabled:opacity-60 hover:bg-secondary"
+                        className="absolute top-1/2 hidden -translate-y-1/2 right-0 z-[10] group w-16 2xl:w-20 h-16 2xl:h-20 max-md:flex items-center justify-center bg-white rounded-full shadow-md transition ease-out duration-200 disabled:opacity-60 hover:bg-secondary"
                     >
                         <ArrowIcon className="fill-black opacity-30 transition-all group-hover:opacity-100 group-hover:fill-white" />
                     </button>
