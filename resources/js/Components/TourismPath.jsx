@@ -1,9 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-import { Reveal } from './Reveal';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export const TourismPath = () => {
     const svgRef = useRef(null);
@@ -27,26 +25,27 @@ export const TourismPath = () => {
                 scrub: true,
                 onUpdate: (self) => {
                     const progress = self.progress;
-            
+
                     gsap.to(path, {
                         strokeDashoffset: pathLength * (1 - progress),
                         duration: 0.2,
                     });
 
                     const point = path.getPointAtLength(pathLength * progress);
-                    
+
                     const svgRect = svg.getBoundingClientRect();
-                    const containerRect = svg.parentElement.getBoundingClientRect();
-                    
+                    const containerRect =
+                        svg.parentElement.getBoundingClientRect();
+
                     const matrix = svg.getScreenCTM();
                     const svgPoint = svg.createSVGPoint();
                     svgPoint.x = point.x;
                     svgPoint.y = point.y;
                     const screenPoint = svgPoint.matrixTransform(matrix);
-                    
+
                     const relativeX = screenPoint.x - containerRect.left;
                     const relativeY = screenPoint.y - containerRect.top;
-                    
+
                     gsap.to(ball, {
                         x: relativeX - ball.offsetWidth / 2,
                         y: relativeY - ball.offsetHeight / 2,
@@ -62,7 +61,10 @@ export const TourismPath = () => {
     }, []);
 
     return (
-        <div className="absolute left-1/2 w-1/2 h-full -translate-x-1/2 hidden md:block">
+        <div
+            className="absolute left-1/2 w-1/2 h-full -translate-x-1/2 hidden md:block"
+            aria-hidden="true"
+        >
             <svg
                 ref={svgRef}
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +77,6 @@ export const TourismPath = () => {
                     ref={pathRef}
                     d="M0.7,0.7c0,0,411.5,374.4,223.7,708.7S40.6,1109.8,108.8,1295s268.2,330.7,52.5,623.4
                         c-329.9,447.8-26,903.5-18.8,921.6c7.2,18.1,305.2,454.3,0,628c-217.4,123.7,46.8,569.3,46.8,569.3"
-                    
                     strokeWidth="2"
                 />
             </svg>
