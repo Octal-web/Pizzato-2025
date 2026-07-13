@@ -1,28 +1,30 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export const ProductFooter = ({ banner }) => {
     const footerBgRef = useRef(null);
 
-    useEffect(() => {  
-        gsap.registerPlugin(ScrollTrigger);     
-        gsap.fromTo(footerBgRef.current, 
-        {
-            backgroundPositionY: '100%',
-        },
-        {
-            backgroundPositionY: '0%',
-            duration: 1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: footerBgRef.current,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-            }
-        });
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.fromTo(
+            footerBgRef.current,
+            {
+                backgroundPositionY: "100%",
+            },
+            {
+                backgroundPositionY: "0%",
+                duration: 1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: footerBgRef.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                },
+            },
+        );
     }, []);
 
     return (
@@ -32,6 +34,7 @@ export const ProductFooter = ({ banner }) => {
             style={{
                 backgroundImage: `url(${banner})`,
             }}
+            aria-hidden="true"
         />
     );
 };

@@ -9,6 +9,11 @@ const translations = {
         403: (url) =>
             `Você não tem permissão para acessar esta página: <strong>${url}</strong>.`,
         back: "Voltar",
+        abreEmNovaAba: "Abrir em nova guia",
+        navegacaoLinhas: "Navegar entre linhas",
+        linhaAnterior: "Linha anterior",
+        proximaLinha: "Próxima linha",
+        fecharFiltros: "Fechar filtros",
         home: "Home",
         sobre: "Sobre",
         nossosVinhos: "Nossos Vinhos",
@@ -71,6 +76,11 @@ const translations = {
         403: (url) =>
             `Sorry, you are forbidden from accessing this page: <strong>${url}</strong>.`,
         back: "Back",
+        abreEmNovaAba: "Open in a new tab",
+        navegacaoLinhas: "Navigating between the lines",
+        linhaAnterior: "Previous line",
+        proximaLinha: "Next line",
+        fecharFiltros: "Close filters",
         home: "Home",
         sobre: "About",
         nossosVinhos: "Our Wines",
