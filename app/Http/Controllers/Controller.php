@@ -12,6 +12,11 @@ use App\Models\Conteudo;
 use App\Models\Linha;
 use App\Models\Categoria;
 use App\Models\DadosGerais;
+<<<<<<< HEAD
+use App\Models\Pergunta;
+
+=======
+>>>>>>> origin/main
 use Illuminate\Support\Str;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -239,6 +244,29 @@ abstract class Controller
                     ];
                 });
 
+            $perguntas_faq = Pergunta::query()
+                ->where([
+                    'visivel' => true,
+                    'excluido' => NULL
+                ])
+                ->with([
+                    'perguntasIdiomas' => function ($q) use ($idioma) {
+                        $q->whereHas('idiomas', function ($r) use ($idioma) {
+                            $r->where('codigo', $idioma)
+                            ->orWhere('padrao', true);
+                        })
+                        ->orderBy('idioma_id', 'DESC');
+                    },
+                ])
+                ->get()
+                ->map(function($pergunta) {
+                    return [
+                        'id' => $pergunta->id,
+                        'pergunta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->pergunta : null,
+                        'resposta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->resposta : null,
+                    ];
+                });
+
             $notifyCookie = array_key_exists('notify-cookies', $_COOKIE) ? true : false;
 
             if ($pagina) {
@@ -261,6 +289,7 @@ abstract class Controller
                 'dados_gerais' => $dados_gerais,
                 'linhas_menu' => $linhas_menu,
                 'categorias_menu' => $categorias_menu,
+                'perguntas_faq' => $perguntas_faq,
                 'notifyCookie' => $notifyCookie,
                 'controller' => $controller,
                 'action' => $action,

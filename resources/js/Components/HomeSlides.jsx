@@ -1,55 +1,91 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { Pagination, Autoplay, EffectFade, A11y } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
 import FormattedTitle from './FormattedTitle';
 
-export const HomeSlides = ({ slides }) => {
+const stripHtml = (value) => {
+    if (!value) return '';
+
+    return String(value)
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+};
+
+const getSlideAlt = (slide, index) => {
+    return (
+        slide.alt ||
+        slide.imagem_alt ||
+        stripHtml(slide.titulo) ||
+        stripHtml(slide.descricao) ||
+        `Destaque ${index + 1} da Pizzato`
+    );
+};
+
+export const HomeSlides = ({ slides = [] }) => {
     const swiperRef = useRef(null);
-    const prevButtonRef = useRef(null);
-    const nextButtonRef = useRef(null);
 
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const handleSlideChange = () => {
-        const swiperInstance = swiperRef.current.swiper;
-        setActiveIndex(swiperInstance.activeIndex);
-    };
-
-    useEffect(() => {
-        const swiperInstance = swiperRef.current.swiper;
-        setActiveIndex(swiperInstance.activeIndex);
-    }, []);
+    if (!slides.length) return null;
 
     return (
-        <div className="relative">
+        <section
+            className="relative"
+            aria-label="Destaques da Pizzato"
+        >
             <Swiper
                 slidesPerView={1}
                 allowTouchMove={false}
                 effect="fade"
-                navigation={{
-                    prevEl: prevButtonRef.current,
-                    nextEl: nextButtonRef.current,
-                }}
                 pagination={{ clickable: true }}
-                autoplay={{ delay: 10000 }}
+                autoplay={{
+                    delay: 10000,
+                    disableOnInteraction: false,
+                }}
                 loop
-                onSlideChange={handleSlideChange}
-                modules={[Navigation, Pagination, Autoplay, EffectFade]}
-                ref={swiperRef}
+                onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    setActiveIndex(swiper.realIndex);
+                }}
+                onSlideChange={(swiper) => {
+                    setActiveIndex(swiper.realIndex);
+                }}
+                modules={[Pagination, Autoplay, EffectFade, A11y]}
+                a11y={{
+                    enabled: true,
+                    prevSlideMessage: 'Slide anterior',
+                    nextSlideMessage: 'Próximo slide',
+                    firstSlideMessage: 'Este é o primeiro slide',
+                    lastSlideMessage: 'Este é o último slide',
+                    paginationBulletMessage: 'Ir para o slide {{index}}',
+                }}
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={slide.id}>
-                        <div className="relative z-[1] h-screen flex items-center">
+                        <article className="relative z-[1] h-screen flex items-center">
                             {slide.tipo === 'imagem' && (
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center"
-                                    style={{
-                                        backgroundImage: `url(${window.innerWidth >= 768 ? slide.imagem : slide.imagem_mobile})`,
-                                    }}
-                                ></div>
+                                <picture className="absolute inset-0 block h-full w-full">
+                                    {slide.imagem && (
+                                        <source
+                                            media="(min-width: 768px)"
+                                            srcSet={slide.imagem}
+                                        />
+                                    )}
+
+                                    <img
+                                        src={slide.imagem_mobile || slide.imagem}
+                                        alt={getSlideAlt(slide, index)}
+                                        loading={index === 0 ? 'eager' : 'lazy'}
+                                        decoding={index === 0 ? 'sync' : 'async'}
+                                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </picture>
                             )}
+
                             {slide.tipo === 'video' && (
                                 <video
                                     className="absolute inset-0 w-full h-full object-cover"
@@ -57,18 +93,27 @@ export const HomeSlides = ({ slides }) => {
                                     muted
                                     loop
                                     playsInline
-                                    src={window.innerWidth >= 768 ? slide.video : slide.video_mobile}
-                                />
+                                    preload={index === 0 ? 'auto' : 'metadata'}
+                                    poster={slide.imagem_mobile || slide.imagem || undefined}
+                                    aria-hidden="true"
+                                >
+                                    {slide.video && (
+                                        <source
+                                            media="(min-width: 768px)"
+                                            src={slide.video}
+                                            type="video/mp4"
+                                        />
+                                    )}
+
+                                    <source
+                                        src={slide.video_mobile || slide.video}
+                                        type="video/mp4"
+                                    />
+                                </video>
                             )}
 
-                            <div
-                                className="absolute inset-0"
-                                style={{
-                                    background: window.innerWidth >= 768
-                                        ? "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)"
-                                        : "linear-gradient(2deg, rgb(0 0 0 / 67%) 0%, rgba(84, 84, 84, 0) 102%)",
-                                }}
-                            ></div>
+                            <div className="absolute inset-0 hidden md:block bg-[linear-gradient(90deg,rgba(0,0,0,1)_0%,rgba(0,0,0,0)_70%)]" />
+                            <div className="absolute inset-0 md:hidden bg-[linear-gradient(2deg,rgb(0_0_0_/_67%)_0%,rgba(84,84,84,0)_102%)]" />
 
                             <div className="container max-w-large h-full">
                                 <div
@@ -81,6 +126,7 @@ export const HomeSlides = ({ slides }) => {
                                     {slide.titulo && (
                                         <FormattedTitle text={slide.titulo} />
                                     )}
+
                                     {slide.descricao && (
                                         <div className="text-secondary text-xl sm:text-2xl 2xl:text-3xl text-balance">
                                             <p>{slide.descricao}</p>
@@ -88,7 +134,7 @@ export const HomeSlides = ({ slides }) => {
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -96,19 +142,26 @@ export const HomeSlides = ({ slides }) => {
             <div className="absolute bottom-10 w-full z-10">
                 <div className="container max-w-large">
                     <div className="flex justify-between -mx-16">
-                        <span
-                            ref={prevButtonRef}
+                        <button
+                            type="button"
+                            aria-label="Slide anterior"
+                            onClick={() => {
+                                swiperRef.current?.slidePrev();
+                            }}
                             className="relative w-7 h-7 cursor-pointer transition-all ease-out duration-200 hover:opacity-80 before:content-[''] before:absolute before:top-1.5 before:left-2 before:w-4 before:h-4 before:border-t-2 before:border-l-2 before:-rotate-45"
-                            
-                        ></span>
+                        />
 
-                        <span
-                            ref={nextButtonRef}
+                        <button
+                            type="button"
+                            aria-label="Próximo slide"
+                            onClick={() => {
+                                swiperRef.current?.slideNext();
+                            }}
                             className="relative w-7 h-7 cursor-pointer transition-all ease-out duration-200 hover:opacity-80 before:content-[''] before:absolute before:top-1.5 before:right-2 before:w-4 before:h-4 before:border-b-2 before:border-r-2 before:-rotate-45"
-                        ></span>
+                        />
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
