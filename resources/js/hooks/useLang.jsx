@@ -54,7 +54,8 @@ const translations = {
         baixarFicha: 'Baixar Ficha Técnica',
         fichaTecnica: 'Ficha Técnica',
         colheitas: 'Colheitas',
-        areaRestrita: 'Área Restrita'
+        areaRestrita: 'Área Restrita',
+        perguntasFrequentes: 'Perguntas Frequentes'
     },
     en: {
         home: 'Home',
@@ -109,7 +110,8 @@ const translations = {
         baixarFicha: 'Download Technical Sheet',
         fichaTecnica: 'Technical Sheet',
         colheitas: 'Harvests',
-        areaRestrita: 'Restrict Area'
+        areaRestrita: 'Restrict Area',
+        perguntasFrequentes: 'Frequently Asked Questions'
     }
 };
 

@@ -11,7 +11,8 @@ use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\EnoturismoController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PoliticasController;
-use App\Http\Controllers\TokensController;
+// use App\Http\Controllers\TokensController;
+use App\Http\Controllers\PerguntasController;
 
 use App\Http\Controllers\Manager\UsuariosController;
 use App\Http\Controllers\Manager\ConteudosController as ManagerPaginasController;
@@ -66,12 +67,14 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::get('/nossos-vinhos/{slug}', [ProdutosController::class, 'produto'])->name('Produtos.produto');
     Route::get('/nossos-vinhos/download/{produto}/{id}', [ProdutosController::class, 'download'])->name('Produtos.download');
 
-    Route::get('lista-de-tokens', [TokensController::class, 'lista'])->name('Tokens.lista');
+    // Route::get('lista-de-tokens', [TokensController::class, 'lista'])->name('Tokens.lista');
 
     Route::get('/enoturismo', [EnoturismoController::class, 'index'])->name('Enoturismo.index');
 
     Route::get('/contato', [ContatoController::class, 'index'])->name('Contato.index');
     Route::post('/contato/enviar', [ContatoController::class, 'enviar'])->name('Contato.enviar');
+
+    Route::get('/perguntas-frequentes', [PerguntasController::class, 'index'])->name('Perguntas.index');
 
     Route::get('/politica-de-privacidade', [PoliticasController::class, 'privacidade'])->name('Politicas.privacidade');
 });
