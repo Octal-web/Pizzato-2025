@@ -15,6 +15,7 @@ use App\Http\Controllers\TokensController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Manager\UsuariosController;
+use App\Http\Controllers\Manager\ConteudosController as ManagerPaginasController;
 use App\Http\Controllers\Manager\ConteudosController as ManagerConteudosController;
 use App\Http\Controllers\Manager\ImagensController as ManagerImagensController;
 use App\Http\Controllers\Manager\HomeController as ManagerHomeController;
