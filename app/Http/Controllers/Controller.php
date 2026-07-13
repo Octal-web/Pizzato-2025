@@ -12,11 +12,8 @@ use App\Models\Conteudo;
 use App\Models\Linha;
 use App\Models\Categoria;
 use App\Models\DadosGerais;
-<<<<<<< HEAD
 use App\Models\Pergunta;
 
-=======
->>>>>>> origin/main
 use Illuminate\Support\Str;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
