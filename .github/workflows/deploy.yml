@@ -26,8 +26,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4
@@ -51,10 +51,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          rm -rf /tmp/repo
+          mkdir -p /tmp/repo
+
           rsync -a --exclude='.git' . /tmp/repo/
 
           git fetch origin gh-pages || true
           git checkout -B gh-pages origin/gh-pages || git checkout --orphan gh-pages
+
+          rm -rf public/build
 
           rsync -a /tmp/repo/. .
 
