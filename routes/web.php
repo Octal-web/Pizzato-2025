@@ -32,6 +32,7 @@ use App\Http\Controllers\Manager\EnoturismoController as ManagerEnoturismoContro
 use App\Http\Controllers\Manager\ExperienciasController as ManagerExperienciasController;
 use App\Http\Controllers\Manager\ContatoController as ManagerContatoController;
 use App\Http\Controllers\Manager\NewsletterController as ManagerNewsletterController;
+use App\Http\Controllers\Manager\PerguntasController as ManagerPerguntasController;
 use App\Http\Controllers\Manager\PoliticasController as ManagerPoliticasController;
 
 use App\Http\Controllers\Intranet\UsuariosController as IntranetUsuariosController;
@@ -290,6 +291,17 @@ Route::prefix('/manager')->group(function () {
 
         Route::get('/newsletter/visualizar/{id}', [ManagerNewsletterController::class, 'visualizar'])->name('Manager.Newsletter.visualizar');
         Route::post('/newsletter/excluir/{id}', [ManagerNewsletterController::class, 'excluir'])->name('Manager.Newsletter.excluir');
+
+
+        Route::get('/perguntas', [ManagerPerguntasController::class, 'index'])->name('Manager.Perguntas.index');
+        Route::post('/perguntas/ordenar', [ManagerPerguntasController::class, 'ordenar'])->name('Manager.Perguntas.ordenar');
+        Route::post('/perguntas/visibilidade/{id}', [ManagerPerguntasController::class, 'visibilidade'])->name('Manager.Perguntas.visibilidade');
+        Route::post('/perguntas/excluir/{id}', [ManagerPerguntasController::class, 'excluir'])->name('Manager.Perguntas.excluir');
+
+        Route::get('/perguntas/adicionar', [ManagerPerguntasController::class, 'adicionar'])->name('Manager.Perguntas.adicionar');
+        Route::post('/perguntas/adicionar', [ManagerPerguntasController::class, 'novo'])->name('Manager.Perguntas.novo');
+        Route::get('/perguntas/editar/{id}', [ManagerPerguntasController::class, 'editar'])->name('Manager.Perguntas.editar');
+        Route::post('/perguntas/editar/{id}', [ManagerPerguntasController::class, 'atualizar'])->name('Manager.Perguntas.atualizar');
 
 
         Route::get('/politicas/privacidade', [ManagerPoliticasController::class, 'privacidade'])->name('Manager.Politicas.privacidade');
