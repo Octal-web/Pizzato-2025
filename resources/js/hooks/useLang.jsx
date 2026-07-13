@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+import { usePage } from "@inertiajs/react";
 
 const translations = {
     pt: {
@@ -55,7 +55,22 @@ const translations = {
         fichaTecnica: 'Ficha Técnica',
         colheitas: 'Colheitas',
         areaRestrita: 'Área Restrita',
-        perguntasFrequentes: 'Perguntas Frequentes'
+        cookie: "Utilizamos cookies para oferecer uma melhor experiência, melhorar o desempenho, analisar como você interage em nosso site e personalizar conteúdo. Para mais informações acesse nossa",
+        cookiePolitica: "política de privacidade",
+        aceitarCookies: "Aceitar todos os cookies",
+        perguntasFrequentes: 'Perguntas Frequentes',
+        503: "Desculpe, estamos em manutenção. Volte em breve.",
+        500: "Ops, algo deu errado em nossos servidores.",
+        404: (url) =>
+            `Desculpe, a página que você está procurando "<strong>${url}</strong>" não foi encontrada.`,
+        403: (url) =>
+            `Você não tem permissão para acessar esta página: <strong>${url}</strong>.`,
+        back: "Voltar",
+        abreEmNovaAba: "Abrir em nova guia",
+        navegacaoLinhas: "Navegar entre linhas",
+        linhaAnterior: "Linha anterior",
+        proximaLinha: "Próxima linha",
+        fecharFiltros: "Fechar filtros",
     },
     en: {
         home: 'Home',
@@ -111,12 +126,35 @@ const translations = {
         fichaTecnica: 'Technical Sheet',
         colheitas: 'Harvests',
         areaRestrita: 'Restrict Area',
-        perguntasFrequentes: 'Frequently Asked Questions'
+        cookie: "We use cookies to provide a better experience, improve performance, analyze how you interact with our site, and personalize content. For more information, please visit our",
+        cookiePolitica: "privacy policy",
+        aceitarCookies: "Accept all cookies",
+        perguntasFrequentes: 'Frequently Asked Questions',
+        503: "Sorry, we are doing some maintenance. Please check back soon.",
+        500: "Oops, something went wrong on our servers.",
+        404: (url) =>
+            `Sorry, the page you are looking for "<strong>${url}</strong>" could not be found.`,
+        403: (url) =>
+            `Sorry, you are forbidden from accessing this page: <strong>${url}</strong>.`,
+        back: "Back",
+        abreEmNovaAba: "Open in a new tab",
+        navegacaoLinhas: "Navigating between the lines",
+        linhaAnterior: "Previous line",
+        proximaLinha: "Next line",
+        fecharFiltros: "Close filters",
     }
 };
 
 export function useLang() {
-  const { idioma } = usePage().props;
+    const { language, idioma } = usePage().props;
 
-  return (key) => translations[idioma]?.[key] || key;
+    return (key, value = null) => {
+        const translation = translations[language ?? idioma]?.[String(key)];
+
+        if (typeof translation === "function") {
+            return translation(value);
+        }
+
+        return translation || key;
+    };
 }

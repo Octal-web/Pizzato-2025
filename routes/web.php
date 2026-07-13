@@ -12,6 +12,7 @@ use App\Http\Controllers\EnoturismoController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PoliticasController;
 // use App\Http\Controllers\TokensController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PerguntasController;
 
 use App\Http\Controllers\Manager\UsuariosController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Manager\EnoturismoController as ManagerEnoturismoContro
 use App\Http\Controllers\Manager\ExperienciasController as ManagerExperienciasController;
 use App\Http\Controllers\Manager\ContatoController as ManagerContatoController;
 use App\Http\Controllers\Manager\NewsletterController as ManagerNewsletterController;
+use App\Http\Controllers\Manager\PerguntasController as ManagerPerguntasController;
 use App\Http\Controllers\Manager\PoliticasController as ManagerPoliticasController;
 
 use App\Http\Controllers\Intranet\UsuariosController as IntranetUsuariosController;
@@ -53,9 +55,11 @@ use App\Http\Controllers\Intranet\MembrosController as IntranetMembrosController
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('Home.index');
 
+    Route::get('/sitemap.xml', [SitemapController::class, '__invoke'])->name('Sitemap.index');
+
     Route::post('/newsletter/enviar', [NewsletterController::class, 'enviar'])->name('Newsletter.enviar');
 
-    Route::prefix('/sobre-nos')->group(function() {
+    Route::prefix('/sobre-nos')->group(function () {
         Route::get('/', [InstitucionalController::class, 'index'])->name('Institucional.index');
         Route::get('/sustentabilidade', [InstitucionalController::class, 'sustentabilidade'])->name('Institucional.sustentabilidade');
         Route::get('/historia', [InstitucionalController::class, 'historia'])->name('Institucional.historia');
@@ -118,7 +122,7 @@ Route::redirect('/pizzato-brut-rose', '/nossos-vinhos/brut-rose', 301);
 Route::redirect('/pizzato-brut-branco', '/nossos-vinhos/brut-branco-blanc-de-blanc', 301);
 Route::redirect('/PizzatoVertigo.html', '/nossos-vinhos/vertigo-nature-branco-tradicional', 301);
 
-Route::prefix('/pt-BR/rotulos/vale-dos-vinhedos')->group(function() {
+Route::prefix('/pt-BR/rotulos/vale-dos-vinhedos')->group(function () {
     Route::redirect('/fausto-merlot', '/nossos-vinhos/merlot', 301);
     Route::redirect('/fausto-tannat', '/nossos-vinhos/tannat', 301);
     Route::redirect('/fausto-verve', '/nossos-vinhos/verve-gran-reserva', 301);
@@ -159,13 +163,13 @@ Route::prefix('/pt-BR/rotulos/vale-dos-vinhedos')->group(function() {
     Route::redirect('/PizzatoVertigo.html', '/nossos-vinhos/vertigo-nature-branco-tradicional', 301);
 });
 
-Route::prefix('/manager')->group(function() {
+Route::prefix('/manager')->group(function () {
     Route::get('/', [UsuariosController::class, 'login'])->name('Manager.Usuarios.login');
     Route::post('/', ['as' => 'login', 'uses' => 'App\Http\Controllers\Manager\UsuariosController@authenticate']);
 
     Route::post('/usuarios/logout', [UsuariosController::class, 'logout'])->name('Manager.Usuarios.logout');
 
-    Route::group(['middleware' => ['auth']], function() {
+    Route::group(['middleware' => ['auth']], function () {
         Route::post('/paginas/editar/{id}', [ManagerPaginasController::class, 'editarAction'])->name('Manager.Paginas.editar');
 
         Route::post('/conteudos/editar/{id}', [ManagerConteudosController::class, 'editarAction'])->name('Manager.Conteudos.editar');
@@ -173,13 +177,14 @@ Route::prefix('/manager')->group(function() {
 
         Route::get('/imagens/{id}', [ManagerImagensController::class, 'conteudo'])->name('Manager.Imagens.conteudo');
         Route::post('/imagens/conteudo/adicionar/{id}', [ManagerImagensController::class, 'novo'])->name('Manager.Imagens.novo');
-        
+
         Route::post('/imagens/conteudo/ordenar/{id}', [ManagerImagensController::class, 'ordenar'])->name('Manager.Imagens.ordenar');
         Route::post('/imagens/conteudo/visibilidade/{id}', [ManagerImagensController::class, 'visibilidade'])->name('Manager.Imagens.visibilidade');
         Route::post('/imagens/conteudo/excluir/{id}', [ManagerImagensController::class, 'excluir'])->name('Manager.Imagens.excluir');
 
 
         Route::get('/home', [ManagerHomeController::class, 'index'])->name('Manager.Home.index');
+        Route::post('/home/atualizar/dados', [ManagerHomeController::class, 'atualizarInfo'])->name('Manager.Home.atualizarInfo');
 
         Route::post('/slides/ordenar', [ManagerSlidesController::class, 'ordenar'])->name('Manager.Slides.ordenar');
         Route::post('/slides/visibilidade/{id}', [ManagerSlidesController::class, 'visibilidade'])->name('Manager.Slides.visibilidade');
@@ -229,7 +234,7 @@ Route::prefix('/manager')->group(function() {
         Route::get('/produtos/baixar-arquivo/{produto}/{id}', [ManagerProdutosController::class, 'baixarArquivo'])->name('Manager.Produtos.baixarArquivo');
 
         Route::get('/produtos/detalhes/{id}', [ManagerDetalhesProdutosController::class, 'index'])->name('Manager.Produtos.Detalhes.index');
-        
+
         Route::post('/produtos/detalhes/ordenar', [ManagerDetalhesProdutosController::class, 'ordenar'])->name('Manager.Produtos.Detalhes.ordenar');
         Route::post('/produtos/detalhes/visibilidade/{id}', [ManagerDetalhesProdutosController::class, 'visibilidade'])->name('Manager.Produtos.Detalhes.visibilidade');
         Route::post('/produtos/detalhes/excluir/{id}', [ManagerDetalhesProdutosController::class, 'excluir'])->name('Manager.Produtos.Detalhes.excluir');
@@ -261,7 +266,7 @@ Route::prefix('/manager')->group(function() {
         Route::get('/categorias/editar/{id}', [ManagerCategoriasController::class, 'editar'])->name('Manager.Categorias.editar');
         Route::post('/categorias/editar/{id}', [ManagerCategoriasController::class, 'atualizar'])->name('Manager.Categorias.atualizar');
 
-        
+
         Route::post('/volumes/ordenar', [ManagerVolumesController::class, 'ordenar'])->name('Manager.Volumes.ordenar');
         Route::post('/volumes/visibilidade/{id}', [ManagerVolumesController::class, 'visibilidade'])->name('Manager.Volumes.visibilidade');
         Route::post('/volumes/excluir/{id}', [ManagerVolumesController::class, 'excluir'])->name('Manager.Volumes.excluir');
@@ -292,6 +297,17 @@ Route::prefix('/manager')->group(function() {
         Route::post('/newsletter/excluir/{id}', [ManagerNewsletterController::class, 'excluir'])->name('Manager.Newsletter.excluir');
 
 
+        Route::get('/perguntas', [ManagerPerguntasController::class, 'index'])->name('Manager.Perguntas.index');
+        Route::post('/perguntas/ordenar', [ManagerPerguntasController::class, 'ordenar'])->name('Manager.Perguntas.ordenar');
+        Route::post('/perguntas/visibilidade/{id}', [ManagerPerguntasController::class, 'visibilidade'])->name('Manager.Perguntas.visibilidade');
+        Route::post('/perguntas/excluir/{id}', [ManagerPerguntasController::class, 'excluir'])->name('Manager.Perguntas.excluir');
+
+        Route::get('/perguntas/adicionar', [ManagerPerguntasController::class, 'adicionar'])->name('Manager.Perguntas.adicionar');
+        Route::post('/perguntas/adicionar', [ManagerPerguntasController::class, 'novo'])->name('Manager.Perguntas.novo');
+        Route::get('/perguntas/editar/{id}', [ManagerPerguntasController::class, 'editar'])->name('Manager.Perguntas.editar');
+        Route::post('/perguntas/editar/{id}', [ManagerPerguntasController::class, 'atualizar'])->name('Manager.Perguntas.atualizar');
+
+
         Route::get('/politicas/privacidade', [ManagerPoliticasController::class, 'privacidade'])->name('Manager.Politicas.privacidade');
     });
 });
@@ -302,7 +318,7 @@ Route::prefix('/intranet')->group(function () {
 
     Route::post('/usuarios/logout', [IntranetUsuariosController::class, 'logout'])->name('Intranet.Usuarios.logout');
 
-    Route::middleware([App\Http\Middleware\FilesAuth::class])->group(function() {
+    Route::middleware([App\Http\Middleware\FilesAuth::class])->group(function () {
         Route::get('/', [IntranetFileController::class, 'index'])->name('Intranet.index');
         Route::post('/upload', [IntranetFileController::class, 'upload'])->name('Intranet.upload');
         Route::post('/folder', [IntranetFileController::class, 'createFolder'])->name('Intranet.createFolder');

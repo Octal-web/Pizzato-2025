@@ -156,12 +156,30 @@ export const InputTipTapEditor = ({ title, name, toolbar = [], value, idioma, on
                         <div className="flex border-r pr-2 mr-1">
                             <select
                                 onChange={(e) => {
-                                    const level = parseInt(e.target.value, 10);
-                                    editor.chain().focus().toggleHeading({ level }).run();
+                                    const value = e.target.value;
+
+                                    if (value === "paragraph") {
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .setParagraph()
+                                            .run();
+                                    } else {
+                                        const level = parseInt(
+                                            e.target.value,
+                                            10,
+                                        );
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .toggleHeading({ level })
+                                            .run();
+                                    }
                                 }}
                                 className="py-1 px-2 rounded border bg-white h-8 w-40 leading-none"
                                 title="Selecione o título"
                             >
+                                <option value="paragraph">Parágrafo</option>
                                 <option value={1} className="text-2xl">Título 1</option>
                                 <option value={2} className="text-xl">Título 2</option>
                                 <option value={3} className="text-md">Título 3</option>

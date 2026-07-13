@@ -1,5 +1,15 @@
-*.log
-.DS_Store
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/public/content/*
+!/public/content/.gitkeep
+/public/files/*
+!/public/files/.gitkeep
+/storage/*.key
+/storage/pail
+/vendor
 .env
 .env.backup
 .env.production
