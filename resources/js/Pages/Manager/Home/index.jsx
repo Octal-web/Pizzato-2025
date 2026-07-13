@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
-import AdminLayout from '@/Layouts/AdminLayout';
-import { Breadcrumb } from '@/Components/Manager/Breadcrumb';
-import { ConfirmModal } from '@/Components/Manager/ConfirmModal';
-import { PageSettings } from '@/Components/Manager/PageSettings';
-import { FormContent } from '@/Components/Manager/FormContent';
 import { BlockContent } from '@/Components/Manager/BlockContent';
+import { Breadcrumb } from '@/Components/Manager/Breadcrumb';
+import { FormContent } from '@/Components/Manager/FormContent';
 import { GeneralData } from '@/Components/Manager/GeneralData';
+import { PageSettings } from '@/Components/Manager/PageSettings';
+import AdminLayout from '@/Layouts/AdminLayout';
 
 const Page = () => {
     // Content
@@ -35,7 +32,7 @@ const Page = () => {
             <Breadcrumb icon={faHome} items={breadcrumbItems} current="Home" idioma={idioma.codigo} idiomas={idiomas} />
             <PageSettings page={pagina} idioma={idioma.codigo} />
 
-            {/* <GeneralData /> */}
+            <GeneralData />
 
             <BlockContent content={contentSlides} />
             

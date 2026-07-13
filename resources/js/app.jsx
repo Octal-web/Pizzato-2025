@@ -3,9 +3,9 @@ import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import React, { useState, useEffect } from 'react';
-import SplashScreen from './components/SplashScreen';
+import SplashScreen from './Components/SplashScreen';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
