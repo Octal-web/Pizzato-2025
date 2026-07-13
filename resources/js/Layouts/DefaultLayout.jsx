@@ -300,7 +300,7 @@ const DefaultLayout = ({ children }) => {
 
                                         <Link href={route('Politicas.privacidade')} className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('politicaPrivacidade')}</Link>
                                         
-                                        <a href="http://pedidos.pizzato.net/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
+                                        <a href="https://pedidos.pizzato.net:8081/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +314,7 @@ const DefaultLayout = ({ children }) => {
 
                             <Link href={route('Politicas.privacidade')} className="block mb-2 text-white text-xs text-right transition-all opacity-50 hover:opacity-100">{lang('politicaPrivacidade')}</Link>
                             
-                            <a href="http://pedidos.pizzato.net/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs text-right transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
+                            <a href="https://pedidos.pizzato.net:8081/pedidos4/login.asp" target="_blank" rel="noopener noreferrer" className="block mb-5 text-white text-xs text-right transition-all opacity-50 hover:opacity-100 max-md:text-right">{lang('areaRestrita')}</a>
                         </div>
                     </div>
                 </div>

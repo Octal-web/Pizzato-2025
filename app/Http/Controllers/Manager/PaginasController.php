@@ -87,10 +87,10 @@ class PaginasController extends Controller
 
                 $pagina_idioma->pagina_id = $pagina->id;
                 $pagina_idioma->idioma_id = $idioma;
-            } else {
-                $copier = new DeepCopy();
-                $paginaOriginal = $copier->copy($pagina_idioma);
             }
+            
+            $copier = new DeepCopy();
+            $paginaOriginal = $copier->copy($pagina);
 
             $pagina_idioma->titulo = $request['paginasIdiomas'][0]['titulo'];
             $pagina_idioma->descricao = $request['paginasIdiomas'][0]['descricao'];
