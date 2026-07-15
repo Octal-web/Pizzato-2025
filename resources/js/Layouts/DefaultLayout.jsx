@@ -293,8 +293,8 @@ const DefaultLayout = ({ children }) => {
                 <div className="container max-w-large">
                     <div className="flex items-center justify-between">
                         <div className="grid grid-cols-3 items-center w-full my-8 xl:my-10 2xl:my-16">
-                            <button className="menu-link" onClick={toggleMenu}>
-                                <div className="flex items-center">
+                            <button type="button" className="menu-link" onClick={toggleMenu} aria-label={isMenuOpen ? "Fechar menu principal" : "Abrir menu principal"} aria-expanded={isMenuOpen} aria-controls="menu-principal">
+                                <div className="flex items-center" aria-hidden="true">
                                     <div
                                         className={`w-10 sm:w-12${["Cases", "Politica", "Politicas", "Perguntas"].includes(controller) || ["produto"].includes(action) ? " invert" : ""}`}
                                     >
@@ -305,18 +305,11 @@ const DefaultLayout = ({ children }) => {
                                 </div>
                             </button>
 
-                            <h1 className="flex items-center">
-                                <Link
-                                    href={route("Home.index")}
-                                    className="flex items-center mx-auto"
-                                >
-                                    <img
-                                        src={`/site/img/logo.png`}
-                                        alt="Logo"
-                                        className={`block w-44 2xl:w-auto ${["Cases", "Politica", "Politicas", "Perguntas"].includes(controller) || ["produto"].includes(action) ? " invert" : ""}`}
-                                    />
+                            <div className="flex items-center">
+                                <Link href={route("Home.index")} className="flex items-center mx-auto" aria-label="Ir para a página inicial da Pizzato Vinhas e Vinhos">
+                                    <img src="/site/img/logo.png" alt="Pizzato Vinhas e Vinhos" width="176" height="56" className={`block h-auto w-44 2xl:w-auto ${["Cases", "Politica", "Politicas", "Perguntas"].includes(controller) || ["produto"].includes(action) ? " invert" : ""}`} />
                                 </Link>
-                            </h1>
+                            </div>
 
                             <LanguageSwitcher
                                 isReverse={
@@ -326,27 +319,17 @@ const DefaultLayout = ({ children }) => {
                                 }
                             />
 
-                            <div
-                                className={`fixed top-0 left-0 z-[3] bg-black w-full h-full transition-opacity duration-500 ${isMenuOpen ? "opacity-50 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-                                onClick={() => {
-                                    setIsMenuOpen(false);
-                                }}
-                            />
-                            <div
-                                className={`${isMenuOpen ? "" : "transform -translate-x-[101%]"} flex fixed top-0 left-0 z-[4] bg-black min-w-[50%] h-full pl-[5%] 2xl:pl-[10%] pr-10 transition-all duration-500`}
-                            >
+                            <button type="button" className={`fixed top-0 left-0 z-[3] bg-black w-full h-full transition-opacity duration-500 ${isMenuOpen ? "opacity-50 pointer-events-auto" : "opacity-0 pointer-events-none"}`} onClick={() => setIsMenuOpen(false)} aria-label="Fechar menu principal" aria-hidden={!isMenuOpen} tabIndex={isMenuOpen ? 0 : -1} />
+                            <div id="menu-principal" role="dialog" aria-modal="true" aria-label="Menu principal" aria-hidden={!isMenuOpen} inert={!isMenuOpen ? "" : undefined} className={`${isMenuOpen ? "" : "transform -translate-x-[101%]"} flex fixed top-0 left-0 z-[4] bg-black min-w-[50%] h-full pl-[5%] 2xl:pl-[10%] pr-10 transition-all duration-500`}>
                                 <div className="relative w-full sm:w-3/5 flex flex-col justify-end min-h-full">
                                     <div className="ml-auto w-full max-w-[25.5rem]">
-                                        <button
-                                            className="absolute top-6 md:top-10 2xl:top-16 mt-2 ml-2 mx-auto text-xs"
-                                            onClick={toggleMenu}
-                                        >
-                                            <div className="relative inline-block w-4 h-4 2xl:-mb-1">
+                                        <button type="button" className="absolute top-6 md:top-10 2xl:top-16 mt-2 ml-2 mx-auto text-xs" onClick={toggleMenu} aria-label="Fechar menu principal">
+                                            <div className="relative inline-block w-4 h-4 2xl:-mb-1" aria-hidden="true">
                                                 <span className="block absolute top-1/2 left-1/2 w-8 sm:w-9 xl:w-7 2xl:w-9 h-[3px] bg-white transform -translate-x-1/2 -translate-y-1/2 rotate-45" />
                                                 <span className="block absolute top-1/2 left-1/2 w-8 sm:w-9 xl:w-7 2xl:w-9 h-[3px] bg-white transform -translate-x-1/2 -translate-y-1/2 -rotate-45" />
                                             </div>
                                         </button>
-                                        <nav className="max-sm:mb-14">
+                                        <nav className="max-sm:mb-14" aria-label="Navegação principal">
                                             <ul className="relative flex flex-col justify-center sm:after:absolute sm:after:-top-6 sm:after:-bottom-6 sm:after:w-px sm:after:bg-neutral-600 sm:after:right-0">
                                                 <li className="relative">
                                                     <Link
@@ -433,10 +416,10 @@ const DefaultLayout = ({ children }) => {
                                                     href="https://api.whatsapp.com/send?text=Ol%C3%A1%21%20Passei%20pelo%20seu%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21&phone=555481140116"
                                                     className="font-secondary w-56 2xl:w-64 bg-primary text-center h-10 2xl:h-12 uppercase flex gap-3 justify-center items-center transition-all hover:bg-opacity-75"
                                                     target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${lang("whatsapp")} - abre em nova aba`}
                                                 >
-                                                    <img
-                                                        src={`/site/img/whatsapp.png`}
-                                                    />{" "}
+                                                    <img src="/site/img/whatsapp.png" alt="" width="24" height="24" className="h-auto w-6" aria-hidden="true" />{" "}
                                                     {lang("whatsapp")}
                                                 </a>
                                             </div>
@@ -445,6 +428,8 @@ const DefaultLayout = ({ children }) => {
                                                     href={dados_gerais.link_mapa}
                                                     className="font-secondary w-56 2xl:w-64 bg-primary text-center h-10 2xl:h-12 flex items-center justify-center tracking-wide uppercase transition-all hover:bg-opacity-75"
                                                     target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${lang("verMapa")} - abre em nova aba`}
                                                 >
                                                     {lang("verMapa")}
                                                 </a>
@@ -459,25 +444,13 @@ const DefaultLayout = ({ children }) => {
                                                 </h5>
                                                 <ul className="flex gap-5">
                                                     <li>
-                                                        <a
-                                                            href="https://www.instagram.com/8poroito/"
-                                                            target="_blank"
-                                                        >
-                                                            <img
-                                                                src={`/site/img/instagram.png`}
-                                                                alt="instagram"
-                                                            />
+                                                        <a href="https://www.instagram.com/8poroito/" target="_blank" rel="noopener noreferrer" aria-label="Instagram - abre em nova aba">
+                                                            <img src="/site/img/instagram.png" alt="" width="24" height="24" className="h-auto w-6" aria-hidden="true" />
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a
-                                                            href={dados_gerais.facebook}
-                                                            target="_blank"
-                                                        >
-                                                            <img
-                                                                src={`/site/img/facebook.png`}
-                                                                alt="facebook"
-                                                            />
+                                                        <a href={dados_gerais.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook - abre em nova aba">
+                                                            <img src="/site/img/facebook.png" alt="" width="24" height="24" className="h-auto w-6" aria-hidden="true" />
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -491,7 +464,7 @@ const DefaultLayout = ({ children }) => {
                                             {lang("marcas")}
                                         </h4>
 
-                                        <nav>
+                                        <nav aria-label="Marcas">
                                             <ul className="space-y-2 2xl:space-y-3">
                                                 {linhas_menu.map(
                                                     (linha, index) => (
@@ -517,7 +490,7 @@ const DefaultLayout = ({ children }) => {
                                             {lang("categorias")}
                                         </h4>
 
-                                        <nav>
+                                        <nav aria-label="Categorias">
                                             <ul className="space-y-2 2xl:space-y-3">
                                                 {categorias_menu.map(
                                                     (categoria, index) => (
@@ -556,14 +529,10 @@ const DefaultLayout = ({ children }) => {
             <footer className="bg-black font-secondary pt-16 lg:pt-20">
                 <div className="container max-w-large">
                     <div className="flex max-md:flex-col justify-between items-start gap-10">
-                        <img
-                            src={`/site/img/logo.png`}
-                            alt="Logo"
-                            className="max-md:mx-auto block w-44 2xl:w-auto"
-                        />
+                        <img src="/site/img/logo.png" alt="Pizzato Vinhas e Vinhos" width="176" height="56" className="max-md:mx-auto block h-auto w-44 2xl:w-auto" />
 
                         <div className="w-full md:w-7/12">
-                            <nav className="relative w-full pb-3 mb-7 before:content-[''] before:absolute before:bottom-0 before:-left-2 before:-right-2 before:border-b before:opacity-50">
+                            <nav className="relative w-full pb-3 mb-7 before:content-[''] before:absolute before:bottom-0 before:-left-2 before:-right-2 before:border-b before:opacity-50" aria-label="Navegação do rodapé">
                                 <ul className="flex max-lg:flex-wrap justify-around md:justify-between gap-x-2 sm:gap-x-10 gap-y-3 md:gap-2 lg:gap-6 2xl:gap-10">
                                     <li>
                                         <Link
@@ -626,6 +595,8 @@ const DefaultLayout = ({ children }) => {
                                             href={dados_gerais.link_loja}
                                             className="text-white text-sm font-medium uppercase transition-all opacity-100 hover:opacity-70"
                                             target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${lang("lojaVirtual")} - abre em nova aba`}
                                         >
                                             {lang("lojaVirtual")}
                                         </a>
@@ -642,6 +613,8 @@ const DefaultLayout = ({ children }) => {
                                             href={dados_gerais.link_mapa}
                                             className="block font-bold underline uppercase opacity-70 transition-all hover:opacity-50 mt-3"
                                             target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${lang("verMapa")} - abre em nova aba`}
                                         >
                                             {lang("verMapa")}
                                         </a>
@@ -663,33 +636,13 @@ const DefaultLayout = ({ children }) => {
                                     <div className="block md:hidden max-md:w-1/2 max-md:mt-6">
                                         <ul className="flex justify-end gap-4 ml-auto mt-2 mb-6">
                                             <li>
-                                                <a
-                                                    href={
-                                                        dados_gerais.instagram
-                                                    }
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="transition-all opacity-70 hover:opacity-100"
-                                                >
-                                                    <img
-                                                        className="w-6"
-                                                        src={`/site/img/instagram.png`}
-                                                        alt="instagram"
-                                                    />
+                                                <a href={dados_gerais.instagram} target="_blank" rel="noopener noreferrer" className="transition-all opacity-70 hover:opacity-100" aria-label="Instagram - abre em nova aba">
+                                                    <img className="h-auto w-6" src="/site/img/instagram.png" alt="" width="24" height="24" aria-hidden="true" />
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href={dados_gerais.facebook}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="transition-all opacity-70 hover:opacity-100"
-                                                >
-                                                    <img
-                                                        className="w-6"
-                                                        src={`/site/img/facebook.png`}
-                                                        alt="facebook"
-                                                    />
+                                                <a href={dados_gerais.facebook} target="_blank" rel="noopener noreferrer" className="transition-all opacity-70 hover:opacity-100" aria-label="Facebook - abre em nova aba">
+                                                    <img className="h-auto w-6" src="/site/img/facebook.png" alt="" width="24" height="24" aria-hidden="true" />
                                                 </a>
                                             </li>
                                         </ul>
@@ -728,31 +681,13 @@ const DefaultLayout = ({ children }) => {
                         <div className="hidden md:block">
                             <ul className="flex justify-end gap-4 ml-auto mt-2 mb-6">
                                 <li>
-                                    <a
-                                        href={dados_gerais.instagram}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="transition-all opacity-70 hover:opacity-100"
-                                    >
-                                        <img
-                                            className="w-6"
-                                            src={`/site/img/instagram.png`}
-                                            alt="instagram"
-                                        />
+                                    <a href={dados_gerais.instagram} target="_blank" rel="noopener noreferrer" className="transition-all opacity-70 hover:opacity-100" aria-label="Instagram - abre em nova aba">
+                                        <img className="h-auto w-6" src="/site/img/instagram.png" alt="" width="24" height="24" aria-hidden="true" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a
-                                        href={dados_gerais.facebook}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="transition-all opacity-70 hover:opacity-100"
-                                    >
-                                        <img
-                                            className="w-6"
-                                            src={`/site/img/facebook.png`}
-                                            alt="facebook"
-                                        />
+                                    <a href={dados_gerais.facebook} target="_blank" rel="noopener noreferrer" className="transition-all opacity-70 hover:opacity-100" aria-label="Facebook - abre em nova aba">
+                                        <img className="h-auto w-6" src="/site/img/facebook.png" alt="" width="24" height="24" aria-hidden="true" />
                                     </a>
                                 </li>
                             </ul>
@@ -796,10 +731,7 @@ const DefaultLayout = ({ children }) => {
                                 <span className="text-white text-xs sm:text-sm opacity-70">
                                     {lang("desenvolvidoPor")}:{" "}
                                 </span>
-                                <img
-                                    src={`/site/img/8poroito-logo.png`}
-                                    className="opacity-50"
-                                />
+                                <img src="/site/img/8poroito-logo.png" alt="8poroito Comunicação e Marketing" width="112" height="23" className="h-auto w-28 opacity-50" />
                             </div>
                         </div>
                     </div>
