@@ -80,7 +80,7 @@ export const HomeSlides = ({ slides = [] }) => {
                                         alt={getSlideAlt(slide, index)}
                                         loading={index === 0 ? 'eager' : 'lazy'}
                                         decoding={index === 0 ? 'sync' : 'async'}
-                                        fetchPriority={index === 0 ? 'high' : 'auto'}
+                                        fetchpriority={index === 0 ? 'high' : 'auto'}
                                         className="h-full w-full object-cover"
                                     />
                                 </picture>
