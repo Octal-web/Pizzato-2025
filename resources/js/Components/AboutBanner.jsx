@@ -63,7 +63,7 @@ export const AboutBanner = ({ content }) => {
                         alt={content.imagem_alt || content.titulo || 'Pizzato Vinhas e Vinhos'}
                         loading="eager"
                         decoding="sync"
-                        fetchPriority="high"
+                        fetchpriority="high"
                         className="w-full h-full object-cover max-[430px]:object-[60%_center]"
                     />
                 </picture>

@@ -122,7 +122,7 @@ export const HomeLines = ({ lines = [] }) => {
                     alt={getLineAlt(item)}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     decoding={index === 0 ? 'sync' : 'async'}
-                    fetchPriority={index === 0 ? 'high' : 'auto'}
+                    fetchpriority={index === 0 ? 'high' : 'auto'}
                 />
                 
                 <div aria-hidden="true" className="absolute inset-0 bg-black/50" />

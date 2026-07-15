@@ -259,8 +259,8 @@ abstract class Controller
                 ->map(function($pergunta) {
                     return [
                         'id' => $pergunta->id,
-                        'pergunta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->pergunta : null,
-                        'resposta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->resposta : null,
+                        'pergunta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->titulo : null,
+                        'resposta' => count($pergunta->perguntasIdiomas) ? $pergunta->perguntasIdiomas[0]->texto : null,
                     ];
                 });
 

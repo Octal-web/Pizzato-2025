@@ -15,7 +15,7 @@ const DefaultLayout = ({ children }) => {
         controller,
         action,
         pagina,
-        perguntas_seo,
+        perguntas_faq,
         linhas_menu,
         categorias_menu,
         notifyCookie,
@@ -163,7 +163,7 @@ const DefaultLayout = ({ children }) => {
     const pageImage = getAbsoluteUrl(pagina?.imagem?.endereco);
     const logoUrl = getAbsoluteUrl("/site/img/logo.png");
 
-    const faqItems = (Array.isArray(perguntas_seo) ? perguntas_seo : [])
+    const faqItems = (Array.isArray(perguntas_faq) ? perguntas_faq : [])
         .filter((pergunta) => pergunta?.pergunta && pergunta?.resposta)
         .map((pergunta) => ({
             "@type": "Question",
