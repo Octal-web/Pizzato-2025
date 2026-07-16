@@ -2,6 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-height: 900px) and (min-width: 640px) {
+    .menu-panel {
+        align-items: flex-start;
+    }
+
+    .menu-panel .menu-primary-column,
+    .menu-panel .menu-secondary-column {
+        min-height: auto;
+        justify-content: flex-start;
+        padding-top: 4.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .menu-panel .menu-secondary-column {
+        margin-bottom: 0;
+    }
+
+    .menu-panel .menu-close-button {
+        top: 1.5rem;
+    }
+
+    .menu-panel .menu-primary-link {
+        font-size: 1.35rem;
+        line-height: 1.15;
+    }
+
+    .menu-panel .menu-primary-item {
+        margin-top: 1rem;
+    }
+
+    .menu-panel .menu-contact-block a {
+        height: 2.5rem;
+    }
+
+    .menu-panel .menu-secondary-title {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        line-height: 1.2;
+    }
+
+    .menu-panel .menu-secondary-title-spaced {
+        margin-top: 1.25rem;
+    }
+
+    .menu-panel .menu-secondary-list > li + li {
+        margin-top: 0.25rem;
+    }
+
+    .menu-panel .menu-secondary-link {
+        font-size: 0.75rem;
+        line-height: 1.15;
+    }
+}
+
+@media (max-height: 680px) and (min-width: 640px) {
+    .menu-panel .menu-primary-column,
+    .menu-panel .menu-secondary-column {
+        padding-top: 3.75rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .menu-panel .menu-primary-link {
+        font-size: 1.2rem;
+    }
+
+    .menu-panel .menu-primary-item + .menu-primary-item {
+        margin-top: 0.35rem;
+    }
+
+    .menu-panel .menu-contact-block {
+        margin-top: 0.75rem;
+    }
+
+    .menu-panel .menu-social-block {
+        margin-top: 0.5rem;
+    }
+
+    .menu-panel .menu-secondary-title {
+        font-size: 1rem;
+    }
+
+    .menu-panel .menu-secondary-link {
+        font-size: 0.7rem;
+    }
+}
+
 
 /* ADMIN */
 

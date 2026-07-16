@@ -3,10 +3,8 @@
 /public/build
 /public/hot
 /public/storage
-/public/content/*
-!/public/content/.gitkeep
-/public/files/*
-!/public/files/.gitkeep
+/public/content/
+/public/files/
 /storage/*.key
 /storage/pail
 /vendor
