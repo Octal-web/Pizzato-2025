@@ -160,6 +160,7 @@ export const HomeProducts = ({ content, products }) => {
                                         <Link href={route('Produtos.produto', {slug: item.slug})} >
                                             <img
                                                 className="max-sm:max-w-[20vw] max-h-[300px] sm:max-h-[400px] mx-auto mb-3 sm:mb-6 2xl:mb-8"
+                                                alt={item.nome}
                                                 src={item.imagem}
                                             />
 

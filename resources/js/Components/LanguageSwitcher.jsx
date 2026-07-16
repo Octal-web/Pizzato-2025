@@ -46,7 +46,7 @@ export const LanguageSwitcher = ({ isReverse }) => {
                         href={locale.url}
                         className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 w-full"
                     >
-                        <img src={`/site/img/flags/${locale.codigo}.png`} className="w-5 h-5" />
+                        <img src={`/site/img/flags/${locale.codigo}.png`} className="w-5 h-5" alt={locale.codigo} />
                         <span className="font-secondary text-black">{locale.codigo.toUpperCase()}</span>
                     </Link>
                 ))}
