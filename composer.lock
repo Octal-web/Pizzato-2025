@@ -32,7 +32,10 @@
             "autoload": {
                 "psr-4": {
                     "Brick\\Math\\": "src/"
-                }
+                },
+                "files": [
+                    "app/Http/helpers.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
