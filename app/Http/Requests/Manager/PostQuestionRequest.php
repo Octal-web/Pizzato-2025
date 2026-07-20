@@ -23,7 +23,7 @@ class PostQuestionRequest extends FormRequest
     {
         return [
             'titulo' => 'required|min:5|max:255',
-            'texto' => 'required|min:5|max:500',
+            'texto' => 'required|min:5|max:600',
         ];
     }
 
@@ -40,7 +40,7 @@ class PostQuestionRequest extends FormRequest
             'titulo.max' => 'A pergunta deve ter no máximo 255 caracteres.',
             'texto.required' => 'Por favor, informe a resposta.',
             'texto.min' => 'A resposta deve ter no mínimo 5 caracteres.',
-            'texto.max' => 'A resposta deve ter no máximo 255 caracteres.',
+            'texto.max' => 'A resposta deve ter no máximo 600 caracteres.',
 
         ];
     }
