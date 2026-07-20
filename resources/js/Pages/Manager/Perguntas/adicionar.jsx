@@ -34,7 +34,9 @@ const Page = () => {
                 name: "texto",
                 tamanho: "col-span-12 lg:col-span-8",
                 tipo: "texto_longo",
-                max: 500,
+                max: 600,
+                editor: true,
+                toolbar: ['Italic', 'Bold', 'Underline']
             },
         ],
     ];
