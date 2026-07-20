@@ -1,69 +1,69 @@
-name: Build and Deploy
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  ci:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.4
-          tools: composer:v2
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: 20
+          cache: npm
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
-          restore-keys: composer-
-
-      - name: Install Node Dependencies
+      - name: Install JS deps
         run: npm ci
 
-      - name: Install PHP Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Build Assets
+      - name: Build frontend (Vite/Inertia)
         run: npm run build
 
-      - name: Commit build assets to deploy branch
-        if: github.ref == 'refs/heads/main'
+      - name: Prepare server (maintenance mode)
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o IdentitiesOnly=yes "$SSH_USER@$SSH_HOST" "
+            cd '$SSH_DEPLOY_PATH'
+            php artisan down --retry=60 || true
+          "
 
-          rm -rf /tmp/repo
-          mkdir -p /tmp/repo
+      - name: Deploy application
+        run: |
+          rsync -az --delete \
+            --exclude="/.git/" \
+            --exclude="/.github/" \
+            --exclude="/.env" \
+            --exclude="/node_modules/" \
+            --exclude="/vendor/" \
+            --exclude="/storage/" \
+            --exclude="/bootstrap/cache/" \
+            --exclude="/public/content/" \
+            --exclude="/public/files/" \
+            --exclude="/public/storage" \
+            --exclude="/public/hot" \
+            --exclude="/tests/" \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o IdentitiesOnly=yes" \
+            ./ \
+            "$SSH_USER@$SSH_HOST:$SSH_DEPLOY_PATH/"
 
-          rsync -a --exclude='.git' . /tmp/repo/
-
-          git fetch origin gh-pages || true
-          git checkout -B gh-pages origin/gh-pages || git checkout --orphan gh-pages
-
-          rm -rf public/build
-
-          rsync -a /tmp/repo/. .
-
-          git add -A
-          git add -f public/build
-          git commit -m "chore: deploy build [skip ci]" || echo "Nothing to commit"
-          git push origin gh-pages
+      - name: Finish deployment
+        if: always()
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o IdentitiesOnly=yes "$SSH_USER@$SSH_HOST" "
+            cd '$SSH_DEPLOY_PATH'
+            composer install \
+              --no-dev \
+              --no-interaction \
+              --prefer-dist \
+              --optimize-autoloader
+            php artisan migrate --force
+            php artisan optimize:clear
+            if [ ! -e public/storage ]; then
+              php artisan storage:link
+            fi
+            php artisan optimize
+            php artisan up || true
+          "
