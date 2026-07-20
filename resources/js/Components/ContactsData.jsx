@@ -7,6 +7,8 @@ import { useLang } from "@/hooks/useLang";
 
 import { Reveal } from './Reveal';
 import { ContactMap } from './ContactMap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 export const ContactsData = ({ apiKey }) => {
     const lang = useLang();
@@ -35,7 +37,7 @@ export const ContactsData = ({ apiKey }) => {
                     </li>
 
                     <li>
-                        <a href="tel:+5554981140116" className="text-sm underline transition-all opacity-70 hover:opacity-100">(54) 98114-0116</a>
+                        <a target='_blank' href="https://wa.me/5554996497010" className="text-sm underline transition-all opacity-70 hover:opacity-100"> (54) 99649-7010 <FontAwesomeIcon icon={faWhatsapp}/></a>
                     </li>
                 </ul>
             </div>
