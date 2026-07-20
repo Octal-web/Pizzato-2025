@@ -1,4 +1,4 @@
-name: Deploy
+name: Build and Deploy
 
 on:
   push:
@@ -7,6 +7,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_DEPLOY_PATH: ${{ secrets.SSH_DEPLOY_PATH }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,42 +22,38 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install JS deps
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build frontend (Vite/Inertia)
+      - name: Build frontend
         run: npm run build
 
-      - name: Prepare server (maintenance mode)
-        run: |
-          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o IdentitiesOnly=yes "$SSH_USER@$SSH_HOST" "
-            cd '$SSH_DEPLOY_PATH'
-            php artisan down --retry=60 || true
-          "
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add known hosts
+        run: ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy application
         run: |
           rsync -az --delete \
-            --exclude="/.git/" \
-            --exclude="/.github/" \
-            --exclude="/.env" \
-            --exclude="/node_modules/" \
-            --exclude="/vendor/" \
-            --exclude="/storage/" \
-            --exclude="/bootstrap/cache/" \
-            --exclude="/public/content/" \
-            --exclude="/public/files/" \
-            --exclude="/public/storage" \
-            --exclude="/public/hot" \
-            --exclude="/tests/" \
-            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o IdentitiesOnly=yes" \
+            --include="/public/build/***" \
+            --filter=':- .gitignore' \
+            --exclude=".git/" \
+            --exclude=".github/" \
+            --exclude=".env" \
+            --exclude="public/content/" \
+            --exclude="public/files/" \
+            --exclude="public/storage" \
+            -e "ssh -p $SSH_PORT" \
             ./ \
             "$SSH_USER@$SSH_HOST:$SSH_DEPLOY_PATH/"
 
       - name: Finish deployment
-        if: always()
         run: |
-          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o IdentitiesOnly=yes "$SSH_USER@$SSH_HOST" "
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "
             cd '$SSH_DEPLOY_PATH'
             composer install \
               --no-dev \
@@ -65,5 +66,4 @@ jobs:
               php artisan storage:link
             fi
             php artisan optimize
-            php artisan up || true
           "
