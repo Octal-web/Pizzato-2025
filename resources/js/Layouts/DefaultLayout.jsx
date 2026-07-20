@@ -469,7 +469,7 @@ const DefaultLayout = ({ children }) => {
                                     <li className="menu-primary-item relative mt-3 2xl:mt-5">
                                         <a
                                             href={dados_gerais?.link_loja}
-                                            className="menu-primary-link relative text-2xl font-light text-secondary transition-all hover:font-bold hover:opacity-80 2xl:text-3xl"
+                                            className="menu-primary-link relative text-2xl text-secondary transition-all font-bold hover:font-black hover:opacity-80 2xl:text-3xl"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
