@@ -1,6 +1,11 @@
 import { Link, useForm, usePage } from "@inertiajs/react";
 
-import { faArrowLeft, faCircleQuestion, faList, faSave } from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowLeft,
+    faCircleQuestion,
+    faList,
+    faSave,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Breadcrumb } from "@/Components/Manager/Breadcrumb";
@@ -21,16 +26,18 @@ const Page = () => {
             {
                 titulo: "Pergunta",
                 name: "titulo",
-                tamanho: 'col-span-12 lg:col-span-8',
+                tamanho: "col-span-12 lg:col-span-8",
                 tipo: "texto",
                 max: 255,
             },
             {
                 titulo: "Resposta",
                 name: "texto",
-                tamanho: 'col-span-12 lg:col-span-8',
+                tamanho: "col-span-12 lg:col-span-8",
                 tipo: "texto_longo",
-                max: 500,
+                max: 600,
+                editor: true,
+                toolbar: ["Italic", "Bold", "Underline"],
             },
         ],
     ];
