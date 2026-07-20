@@ -62,9 +62,4 @@ jobs:
               --optimize-autoloader
 
             php artisan migrate --force
-            php artisan optimize:clear
-
-            if [ ! -e public/storage ]; then
-              php artisan storage:link
-            fi
           "
