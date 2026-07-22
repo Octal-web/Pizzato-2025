@@ -160,12 +160,28 @@ const DefaultLayout = ({ children }) => {
     };
 
     const stripTags = (value = "") => {
+        if (!value) return "";
+
+        if (typeof window !== "undefined") {
+            const element = document.createElement("div");
+
+            element.innerHTML = String(value)
+                .replace(/<br\s*\/?>/gi, " ")
+                .replace(/<\/p>/gi, " ")
+                .replace(/<\/li>/gi, " ");
+
+            return element.textContent.replace(/\s+/g, " ").trim();
+        }
+
         return String(value)
+            .replace(/<br\s*\/?>/gi, " ")
+            .replace(/<\/p>/gi, " ")
+            .replace(/<\/li>/gi, " ")
             .replace(/<[^>]*>/g, " ")
+            .replace(/&nbsp;/g, " ")
             .replace(/\s+/g, " ")
             .trim();
     };
-
     const getAbsoluteUrl = (url) => {
         if (!url) return "";
         if (/^https?:\/\//i.test(url)) return url;
