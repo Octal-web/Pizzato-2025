@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Conteudo;
 use App\Models\ConteudoIdioma;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
@@ -191,7 +192,7 @@ class ConteudosController extends Controller
             return Inertia::location(route('Manager.Home.index'));
         }
 
-        return Response::download(File::path('content/files/' . $conteudo_idioma->arquivo));
+        return Response::download(File::path('content/files/' . $conteudo->conteudosIdiomas()->first()->arquivo));
     }
 
     /**
@@ -214,8 +215,8 @@ class ConteudosController extends Controller
                 ->with('Parametro')
                 ->first();
 
-            $arquivo = $conteudo_idioma->arquivo;
-            $conteudo_idioma->arquivo = null;
+            $arquivo = $conteudo->conteudosIdiomas()->first()->arquivo;
+            $conteudo->conteudosIdiomas()->first()->arquivo = null;
 
             if ($conteudo->save()) {
                 File::delete('content/files/' . $arquivo);
