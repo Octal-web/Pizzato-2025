@@ -47,9 +47,9 @@ class ContatoController extends Controller
                 ];
 
                 $destinatarios = [
-                    'geral' => 'trabalhista2@nomb.com.br',
+                    'geral' => 'contatos@pizzato.net',
                     'comercial' => 'vendas03@pizzato.net',
-                    'enoturismo' => 'enoturismo@pizzato.net',
+                    'enoturismo' => 'turismo@pizzato.net',
                 ];
 
                 $to = $destinatarios[$request->assunto] ?? 'contato@pizzato.net';
