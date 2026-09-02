@@ -21,7 +21,7 @@ use Inertia\Inertia;
 
 class ProdutosController extends Controller
 {
-    private function getLanguages($language = null)
+    protected function getLanguages($language = null)
     {
         $lang = $language ?? request()->get('lang', 'pt');
         $idioma = Idioma::where('codigo', $lang)->first();
