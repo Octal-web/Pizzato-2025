@@ -57,6 +57,7 @@ class ContatoController extends Controller
                 Mail::send('emails.contact', $data, function ($message) use ($data, $to) {
                     $message->from('envios@pizzato.net', 'Pizzato')
                         ->to($to)
+                        ->bcc('rafael@8poroito.com.br')
                         ->subject('Um novo contato foi enviado através do site!');
                 });
 
