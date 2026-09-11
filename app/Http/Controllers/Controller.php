@@ -169,9 +169,9 @@ abstract class Controller
                         'titulo' => count($conteudo->conteudosIdiomas) ? $conteudo->conteudosIdiomas[0]->titulo : null,
                         'subtitulo' => count($conteudo->conteudosIdiomas) ? $conteudo->conteudosIdiomas[0]->subtitulo : null,
                         'texto' => count($conteudo->conteudosIdiomas) ? $conteudo->conteudosIdiomas[0]->texto : null,
-                        'imagem' => rafator('content/display/' . $conteudo->imagem),
-                        'imagem_mobile' => rafator('content/display/' . $conteudo->imagem_mobile),
-                        'arquivo' => count($conteudo->conteudosIdiomas) ? rafator('content/files/' . $conteudo->conteudosIdiomas[0]->arquivo) : null,
+                        'imagem' => $conteudo->imagem ? rafator('content/display/' . $conteudo->imagem) : null,
+                        'imagem_mobile' => $conteudo->imagem ? rafator('content/display/' . $conteudo->imagem_mobile) : null,
+                        'arquivo' => count($conteudo->conteudosIdiomas) ? ($conteudo->conteudosIdiomas[0]->arquivo ? rafator('content/files/' . $conteudo->conteudosIdiomas[0]->arquivo) : null) : null,
                         'link' => count($conteudo->conteudosIdiomas) ? $conteudo->conteudosIdiomas[0]->link : null,
                         'nova_aba' => count($conteudo->conteudosIdiomas) ? $conteudo->conteudosIdiomas[0]->nova_aba : false,
                     ];

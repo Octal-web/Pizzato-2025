@@ -394,7 +394,7 @@ const DefaultLayout = ({ children }) => {
                     aria-modal="true"
                     aria-label="Menu principal"
                     aria-hidden={!isMenuOpen}
-                    inert={!isMenuOpen ? true : undefined}
+                    inert={!isMenuOpen ? "" : undefined}
                     className={`menu-panel fixed left-0 top-0 z-[4] flex h-dvh min-w-[50%] overflow-y-auto overscroll-contain bg-black pl-[5%] pr-10 transition-transform duration-500 2xl:pl-[10%]${isMenuOpen ? "" : " -translate-x-[101%]"}`}
                 >
                     <div className="menu-primary-column relative flex min-h-full w-full flex-col justify-end sm:w-3/5">

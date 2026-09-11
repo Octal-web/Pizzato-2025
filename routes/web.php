@@ -10,6 +10,7 @@ use App\Http\Controllers\LinhasController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\EnoturismoController;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\ImportacoesController;
 use App\Http\Controllers\PoliticasController;
 // use App\Http\Controllers\TokensController;
 use App\Http\Controllers\SitemapController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\Manager\VolumesController as ManagerVolumesController;
 use App\Http\Controllers\Manager\CategoriasController as ManagerCategoriasController;
 use App\Http\Controllers\Manager\EnoturismoController as ManagerEnoturismoController;
 use App\Http\Controllers\Manager\ExperienciasController as ManagerExperienciasController;
+use App\Http\Controllers\Manager\ImportacoesController as ManagerImportacoesController;
 use App\Http\Controllers\Manager\ContatoController as ManagerContatoController;
 use App\Http\Controllers\Manager\NewsletterController as ManagerNewsletterController;
 use App\Http\Controllers\Manager\PerguntasController as ManagerPerguntasController;
@@ -74,6 +76,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Route::get('lista-de-tokens', [TokensController::class, 'lista'])->name('Tokens.lista');
 
     Route::get('/enoturismo', [EnoturismoController::class, 'index'])->name('Enoturismo.index');
+    
+    Route::get('/ao-redor-do-mundo', [ImportacoesController::class, 'index'])->name('Importacoes.index');
 
     Route::get('/contato', [ContatoController::class, 'index'])->name('Contato.index');
     Route::post('/contato/enviar', [ContatoController::class, 'enviar'])->name('Contato.enviar');
@@ -276,6 +280,15 @@ Route::prefix('/manager')->group(function () {
         Route::get('/volumes/editar/{id}', [ManagerVolumesController::class, 'editar'])->name('Manager.Volumes.editar');
         Route::post('/volumes/editar/{id}', [ManagerVolumesController::class, 'atualizar'])->name('Manager.Volumes.atualizar');
 
+
+        Route::get('/importacoes', [ManagerImportacoesController::class, 'index'])->name('Manager.Importacoes.index');
+        Route::post('/importacoes/ordenar', [ManagerImportacoesController::class, 'ordenar'])->name('Manager.Importacoes.ordenar');
+        Route::post('/importacoes/visibilidade/{id}', [ManagerImportacoesController::class, 'visibilidade'])->name('Manager.Importacoes.visibilidade');
+        Route::post('/importacoes/excluir/{id}', [ManagerImportacoesController::class, 'excluir'])->name('Manager.Importacoes.excluir');
+        Route::get('/importacoes/adicionar', [ManagerImportacoesController::class, 'adicionar'])->name('Manager.Importacoes.adicionar');
+        Route::post('/importacoes/adicionar', [ManagerImportacoesController::class, 'novo'])->name('Manager.Importacoes.novo');
+        Route::get('/importacoes/editar/{id}', [ManagerImportacoesController::class, 'editar'])->name('Manager.Importacoes.editar');
+        Route::post('/importacoes/editar/{id}', [ManagerImportacoesController::class, 'atualizar'])->name('Manager.Importacoes.atualizar');
 
         Route::get('/enoturismo', [ManagerEnoturismoController::class, 'index'])->name('Manager.Enoturismo.index');
 
