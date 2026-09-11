@@ -12,17 +12,19 @@ use Illuminate\Support\Facades\Mail;
 
 class ContatoController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return Inertia::render('Contato/index', [
-            'googleMapsKey' => env('GOOGLE_MAPS_API_KEY'),
+            'googleMapsKey' => config('services.google_maps.api_key'),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function enviar(PostContactRequest $request) {
-        if($request->post()){
+    public function enviar(PostContactRequest $request)
+    {
+        if ($request->post()) {
             $contato = new Contato;
 
             $token = md5(uniqid(rand(), true));
@@ -45,19 +47,20 @@ class ContatoController extends Controller
                 ];
 
                 $destinatarios = [
-                    'geral' => 'trabalhista2@nomb.com.br',
+                    'geral' => 'contatos@pizzato.net',
                     'comercial' => 'vendas03@pizzato.net',
-                    'enoturismo' => 'enoturismo@pizzato.net',
+                    'enoturismo' => 'turismo@pizzato.net',
                 ];
 
                 $to = $destinatarios[$request->assunto] ?? 'contato@pizzato.net';
 
-                Mail::send('emails.contact', $data, function($message)use($data, $to) {
+                Mail::send('emails.contact', $data, function ($message) use ($data, $to) {
                     $message->from('envios@pizzato.net', 'Pizzato')
-                            ->to($to)
-                            ->subject('Um novo contato foi enviado através do site!');
+                        ->to($to)
+                        ->bcc('rafael@8poroito.com.br')
+                        ->subject('Um novo contato foi enviado através do site!');
                 });
-                
+
                 return back()->with('message', [
                     'type' => 'success',
                     'msg' => 'Contato enviado com sucesso!',

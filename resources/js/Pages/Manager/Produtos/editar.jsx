@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, usePage, useForm } from '@inertiajs/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,7 +40,7 @@ const Page = () => {
         e.preventDefault();
         const idioma_url = new URLSearchParams(window.location.search).get('lang');
 
-        post(route('Manager.Produtos.atualizar', {id: produto.id, lang: idioma_url}), {
+        post(route('Manager.Produtos.atualizar', { id: produto.id, lang: idioma_url }), {
             preserveScroll: true,
         });
     };
@@ -78,17 +78,22 @@ const Page = () => {
 
     const handleArquivoChange = (index, field, value) => {
         const newArquivos = [...data.arq];
-        newArquivos[index][field] = value;
+        newArquivos[index] = {
+            ...newArquivos[index],
+            [field]: value
+        };
         setData('arq', newArquivos);
     };
     
+    const arquivosVisiveis = data.arq.filter(a => !a._deleted);
+
     return (
         <AdminLayout>
             <Breadcrumb icon={faWineBottle} items={breadcrumbItems} current="Editar" idioma={idioma.codigo} idiomas={idiomas} id={produto.id} />
 
             <div className="mb-6 rounded-sm border border-stroke bg-white px-5 py-5 shadow-md">
                 <Link
-                    href={route('Manager.Produtos.Detalhes.index', {id: produto.id})}
+                    href={route('Manager.Produtos.Detalhes.index', { id: produto.id })}
                     className="flex items-center border border-stroke bg-white px-3 py-2 float-right rounded-md transition-all hover:bg-slate-100 ml-2"
                 >   
                     <FontAwesomeIcon icon={faList} className="text-slate-700 mr-2" />
@@ -96,7 +101,7 @@ const Page = () => {
                 </Link>
 
                 <div className="mt-12">
-                    <div onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         {inputItems.map((group, groupIndex) => (
                             <div key={groupIndex} className="grid grid-cols-12 gap-x-6">
                                 {group.map((input, index) => (
@@ -127,61 +132,62 @@ const Page = () => {
                         </div>
 
                         <div>
-                            {data.arq.filter(a => !a._deleted).map((arquivo, index) => {
-                                const realIndex = data.arq.indexOf(arquivo);
-                                
-                                return (
-                                <div key={realIndex} className="mb-6 p-4 border-b last:border-none border-gray-200">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <h3 className="font-semibold text-gray-700">Arquivo {index + 1}</h3>
-                                        {index !== 0 && (
-                                            <button
-                                                type="button"
-                                                onClick={() => removeArquivo(realIndex)}
-                                                className="flex items-center text-sm bg-red-600 text-white px-3 py-1 rounded-md transition-all hover:bg-red-700"
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                                                Remover
-                                            </button>
-                                        )}
-                                    </div>
+                            {data.arq.map((arquivo, index) => {
+                                if (arquivo._deleted) return null;
 
-                                    <div className="grid grid-cols-12 gap-x-6">
-                                        <div className="w-full col-span-12 md:col-span-6 lg:col-span-4">
-                                            <InputText
-                                                title="Título do Arquivo"
-                                                name={`arq_titulo_${realIndex}`}
-                                                max="30"
-                                                value={arquivo.titulo || ''}
-                                                idioma={idioma.codigo}
-                                                onChange={(name, value) => handleArquivoChange(realIndex, 'titulo', value)}
-                                            />
-                                            {errors[`arq.${realIndex}.titulo`] && (
-                                                <p className="text-sm text-red-500 -mt-5 mb-3">
-                                                    {errors[`arq.${realIndex}.titulo`]}
-                                                </p>
+                                return (
+                                    <div key={arquivo.id || `novo-${index}`} className="mb-6 p-4 border-b last:border-none border-gray-200">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="font-semibold text-gray-700">Arquivo {index + 1}</h3>
+                                            {arquivosVisiveis.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeArquivo(index)}
+                                                    className="flex items-center text-sm bg-red-600 text-white px-3 py-1 rounded-md transition-all hover:bg-red-700"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                                                    Remover
+                                                </button>
                                             )}
                                         </div>
-                                        
-                                        <div className="w-full col-span-12 md:col-span-6 lg:col-span-4">
-                                            <InputFileDropzone
-                                                title="Arquivo"
-                                                type="arquivo"
-                                                name={`arq_file_${realIndex}`}
-                                                value={arquivo.arquivo}
-                                                onChange={(name, value) => handleArquivoChange(realIndex, 'arquivo', value)}
-                                                currentFile={arquivo.id ? route('Manager.Produtos.baixarArquivo', { produto: produto.id, id: arquivo.id }) : null}
-                                                onDelete={() => handleArquivoChange(realIndex, 'arquivo', null)}
-                                            />
-                                            {errors[`arq.${realIndex}.arquivo`] && (
-                                                <p className="text-sm text-red-500 -mt-5 mb-3">
-                                                    {errors[`arq.${realIndex}.arquivo`]}
-                                                </p>
-                                            )}
+
+                                        <div className="grid grid-cols-12 gap-x-6">
+                                            <div className="w-full col-span-12 md:col-span-6 lg:col-span-4">
+                                                <InputText
+                                                    title="Título do Arquivo"
+                                                    name={`arq.${index}.titulo`}
+                                                    max="30"
+                                                    value={arquivo.titulo || ''}
+                                                    idioma={idioma.codigo}
+                                                    onChange={(name, value) => handleArquivoChange(index, 'titulo', value)}
+                                                />
+                                                {errors[`arq.${index}.titulo`] && (
+                                                    <p className="text-sm text-red-500 -mt-5 mb-3">
+                                                        {errors[`arq.${index}.titulo`]}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            
+                                            <div className="w-full col-span-12 md:col-span-6 lg:col-span-4">
+                                                <InputFileDropzone
+                                                    title="Arquivo"
+                                                    type="arquivo"
+                                                    name={`arq.${index}.arquivo`}
+                                                    value={arquivo.arquivo}
+                                                    onChange={(name, value) => handleArquivoChange(index, 'arquivo', value)}
+                                                    currentFile={arquivo.id ? route('Manager.Produtos.baixarArquivo', { produto: produto.id, id: arquivo.id }) : null}
+                                                    onDelete={() => handleArquivoChange(index, 'arquivo', null)}
+                                                />
+                                                {errors[`arq.${index}.arquivo`] && (
+                                                    <p className="text-sm text-red-500 -mt-5 mb-3">
+                                                        {errors[`arq.${index}.arquivo`]}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )})}
+                                );
+                            })}
                         </div>
 
                         <div className="flex items-center justify-end mt-8">
@@ -191,8 +197,7 @@ const Page = () => {
                             </Link>
 
                             <button
-                                type="button"
-                                onClick={handleSubmit}
+                                type="submit"
                                 disabled={processing}
                                 className="block relative w-fit rounded-lg border border-gray-300 px-3 py-2 cursor-pointer transition-all hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >   
@@ -200,7 +205,7 @@ const Page = () => {
                                 {processing ? 'Salvando...' : 'Salvar'}
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </AdminLayout>

@@ -37,7 +37,7 @@ const Page = () => {
                 tipo: "texto_longo",
                 max: 600,
                 editor: true,
-                toolbar: ["Italic", "Bold", "Underline"],
+                toolbar: ["Italic", "Bold", "Underline", "Link"],
             },
         ],
     ];

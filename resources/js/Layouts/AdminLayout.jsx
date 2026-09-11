@@ -13,6 +13,7 @@ import {
     faEnvelope,
     faFileText,
     faWineGlass,
+    faGlobe,
     faPortrait,
     faCircleQuestion,
 } from "@fortawesome/free-solid-svg-icons";
@@ -65,6 +66,13 @@ const menus = [
         icon: faWineGlass,
         href: route("Manager.Enoturismo.index"),
         controllers: ["Enoturismo", "Experiencias"],
+    },
+    {
+        id: 8,
+        label: "Importações",
+        icon: faGlobe,
+        href: route("Manager.Importacoes.index"),
+        controllers: ["Importacoes"],
     },
     {
         id: 5,
