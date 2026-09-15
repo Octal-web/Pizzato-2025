@@ -12,12 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\Manager\PostImportRequest;
 
-use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-
-use DeepCopy\DeepCopy;
 
 class ImportacoesController extends Controller
 {
@@ -46,7 +41,6 @@ class ImportacoesController extends Controller
                 return [
                     'id' => $importacao->id,
                     'visivel' => $importacao->visivel,
-                    'imagem' => rafator('content/imports/thumbs/' . $importacao->imagem),
                     'nome' => $importacao->importacoesIdiomas->isNotEmpty() ? $importacao->importacoesIdiomas[0]->pais : null,
                 ];
             });
@@ -78,12 +72,9 @@ class ImportacoesController extends Controller
             $importacao = new Importacao;
             $importacao_idioma = new ImportacaoIdioma;
 
-            $importacao->imagem = md5(uniqid((string) rand(), true)) . '.' . strtolower($request->file('img')->extension());
-            
             $response = $importacao->save();
             
             $importacao_idioma->pais = $request->pais;
-            $importacao_idioma->cidades = $request->cidades;
             $importacao_idioma->descricao = $request->descricao;
 
             $importacao_idioma->importacao_id = $importacao->id;
@@ -92,7 +83,6 @@ class ImportacoesController extends Controller
             $response = $importacao_idioma->save();
 
             if ($response) {
-                $image = $request->file('img')->move(public_path('content/imports/thumbs/'), $importacao->imagem);
 
                 return to_route('Manager.Importacoes.index')->with('message', ['type' => 'success', 'msg' => 'Registro salvo com sucesso!']);
             }
@@ -146,9 +136,7 @@ class ImportacoesController extends Controller
         
         $importacaoData = [
             'id' => $importacao->id,
-            'imagem' => rafator('content/imports/thumbs/' . $importacao->imagem),
             'pais' => count($importacao->importacoesIdiomas) ? $importacao->importacoesIdiomas[0]->pais : null,
-            'cidades' => count($importacao->importacoesIdiomas) ? $importacao->importacoesIdiomas[0]->cidades : null,
             'descricao' => count($importacao->importacoesIdiomas) ? $importacao->importacoesIdiomas[0]->descricao : null
         ];
 
@@ -214,29 +202,13 @@ class ImportacoesController extends Controller
                 $importacao_idioma->idioma_id = $idioma;
             }
 
-            $copier = new DeepCopy();
-            $importacaoOriginal = $copier->copy($importacao);
-
-            if ($request->file('img') && $request->file('img')->getError() == 0) {
-                $importacao->imagem = md5(uniqid((string) rand(), true)) . '.' . strtolower($request->file('img')->extension());
-            }
-
             $importacao_idioma->pais = $request->pais;
-            $importacao_idioma->cidades = $request->cidades;
             $importacao_idioma->descricao = $request->descricao;
 
             $response = $importacao->save();
             $response = $importacao_idioma->save();
 
             if ($response) {
-                if ($request->file('img') && $request->file('img')->getError() == 0) {
-                    if ($importacao->imagem && isset($importacaoOriginal) && File::exists('content/imports/thumbs/' . $importacaoOriginal->imagem)) {
-                        File::delete('content/imports/thumbs/' . $importacaoOriginal->imagem);
-                    }
-                    
-                    $image = $request->file('img')->move(public_path('content/imports/thumbs/'), $importacao->imagem);
-                }
-
                 return to_route('Manager.Importacoes.index')->with('message', ['type' => 'success', 'msg' => 'Registro salvo com sucesso!']);
             }
         }

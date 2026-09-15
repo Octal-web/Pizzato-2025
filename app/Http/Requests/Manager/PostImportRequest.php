@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PostImportRequest extends FormRequest
 {
@@ -22,10 +23,11 @@ class PostImportRequest extends FormRequest
     public function rules()
     {  
         return [
-            'pais' => 'required|string|max:72',
-            'cidades' => 'nullable|string|max:64',
+            'pais' => ['required', 'string', 'max:72', Rule::in(array_column(
+                json_decode(file_get_contents(resource_path('data/import-countries.json')), true, 512, JSON_THROW_ON_ERROR),
+                'name'
+            ))],
             'descricao' => 'required',
-            'img' => inertia()->getShared('action') == 'novo' ? 'required|image|mimes:png,jpg|max:2048' : 'nullable|image|mimes:png,jpg|max:2048',
         ];
     }
 
@@ -39,12 +41,8 @@ class PostImportRequest extends FormRequest
         return [
             'pais.required' => 'Por favor, informe o país.',
             'pais.max' => 'O país deve ter no máximo 72 caracteres.',
-            'cidades.max' => 'As cidades devem ter no máximo 64 caracteres.',
+            'pais.in' => 'Por favor, selecione um país válido da lista.',
             'descricao.required' => 'Por favor, informe a descrição.',
-            'img.required' => 'Por favor, selecione uma imagem.',
-            'img.image' => 'Por favor, selecione uma imagem válida.',
-            'img.mimes' => 'Os formatos de imagem válidos são: JPG e PNG.',
-            'img.max' => 'Por favor, envie um arquivo menor que 2MB.',
         ];
     }
 }
