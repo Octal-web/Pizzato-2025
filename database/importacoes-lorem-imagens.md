@@ -1,4 +1,5 @@
-Imagens fictícias de teste geradas com a ferramenta integrada de geração de imagens.
+Registro histórico das imagens fictícias de teste. As importações agora usam
+bandeiras e não exibem mais estas imagens. Consulte `importacoes-paises.md`.
 
 ## lorem-franca.png
 
@@ -11,4 +12,3 @@ Use case: photorealistic-natural. Create a landscape website placeholder photogr
 ## lorem-portugal.png
 
 Use case: photorealistic-natural. Create a landscape website placeholder photograph, aspect ratio 12:5. Douro valley Portugal: winding river between terraced green vineyards and layered sunlit hills, warm late afternoon light, realistic travel editorial photography, natural textures, wide scenic composition. No people, no labels, no logos, no typography, no watermark.
-

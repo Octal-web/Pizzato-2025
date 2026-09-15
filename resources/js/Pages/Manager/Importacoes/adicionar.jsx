@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, usePage, useForm } from '@inertiajs/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,57 +6,31 @@ import { faGlobe, faSave, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Breadcrumb } from '@/Components/Manager/Breadcrumb';
+import { InputCountry } from '@/Components/Manager/Inputs/InputCountry';
 import { FormGroup } from '@/Components/Manager/Inputs/FormGroup';
 
 const Page = () => {
     const { idioma } = usePage().props;
-    const { data, setData, post, processing, errors } = useForm();
+    const { data, setData, post, processing, errors } = useForm({ pais: '', descricao: '' });
 
     const breadcrumbItems = [
         { label: 'Importações', link: 'Manager.Importacoes.index' },
     ];
 
     const inputItems = [
-        [{ titulo: 'País', name: 'pais', tamanho: 'col-span-12 lg:col-span-8', tipo: 'texto', max: 72 }],
-        [{ titulo: 'Cidades', name: 'cidades', tamanho: 'col-span-12 lg:col-span-8', tipo: 'texto', max: 64 }],
-        [{ titulo: 'Descrição', name: 'descricao', tamanho: 'col-span-12 lg:col-span-8', tipo: 'texto_longo', editor: true, 'toolbar': ['Bold', 'Italic', 'List'], max: 1080 }],
-        [{ titulo: 'Imagem', name: 'img', tamanho: 'col-span-12 md:col-span-6', tipo: 'imagem', crop: true, largura: 600, altura: 600 }]
+        [{ titulo: 'Descrição', name: 'descricao', tamanho: 'col-span-12 lg:col-span-8', tipo: 'texto_longo', editor: true, 'toolbar': ['Bold', 'Italic', 'List', 'Link'], max: 1080 }],
     ];
-
-    const initializeData = (inputItems) => {
-        let initialData = {};
-        inputItems.forEach(group => {
-            group.forEach(item => {
-                initialData[item.name] = item.tipo === 'check' ? false : '';
-            });
-        });
-        return initialData;
-    };
-
-    useEffect(() => {
-        const initialData = initializeData(inputItems);
-        setData(initialData);
-    }, []); 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('Manager.Importacoes.novo'), {
             preserveScroll: true
         });
-        console.log(data);
 
-        console.log(errors);
     };
 
     const onChange = (name, value) => {
         setData(name, value);
-    };
-
-    const handleImageCrop = (croppedImage, fileExtenstion, name) => {
-        setData(prevData => ({
-            ...prevData,
-            [name]: croppedImage
-        }));
     };
 
     return (
@@ -66,6 +40,9 @@ const Page = () => {
             <div className="mb-6 rounded-sm border border-stroke bg-white px-5 py-5 shadow-md">
                 <div className="mt-10">
                     <form onSubmit={handleSubmit}>
+                        <div className="grid grid-cols-12 gap-x-6">
+                            <InputCountry value={data.pais} onChange={onChange} error={errors.pais} />
+                        </div>
                         {inputItems.map((group, groupIndex) => (
                             <div key={groupIndex} className="grid grid-cols-12 gap-x-6">
                                 {group.map((input, index) => (
@@ -75,7 +52,6 @@ const Page = () => {
                                             idioma={idioma}
                                             value={data[input.name]}
                                             onChange={onChange}
-                                            handleImageCrop={handleImageCrop}
                                         />
                                         {errors[input.name] && <p className="text-sm text-red-500 -mt-5 mb-3">{errors[input.name]}</p>}
                                     </div>
@@ -91,6 +67,7 @@ const Page = () => {
 
                             <button
                                 type="submit"
+                                disabled={processing}
                                 className="block relative w-fit rounded-lg border border-gray-300 px-3 py-2 cursor-pointer transition-all hover:bg-slate-200"
                             >   
                                 <FontAwesomeIcon icon={faSave} className="text-slate-700 mr-2" />

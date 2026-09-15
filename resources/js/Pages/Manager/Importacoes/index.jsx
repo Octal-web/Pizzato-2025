@@ -21,8 +21,7 @@ const Page = () => {
     const contentImports = {
         nome: ['Importações', 'importação'],
         controller: 'Importacoes',
-        imagens: true,
-        imgClass: '',
+        imagens: false,
         editavel: true,
         conteudos: importacoes,
     };

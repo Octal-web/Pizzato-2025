@@ -1,56 +1,49 @@
+import { useMemo } from 'react';
 import { Reveal } from './Reveal';
+import { CountryFlag } from './CountryFlag';
 
-export const ImportsItem = ({ item, index }) => {
-    const reversed = index % 2 === 1;
+const PHONE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="black" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M13.832,16.568a1,1,0,0,0,1.213,-.303l.355,-.465A2,2,0,0,1,16.99,15h3.01a2,2,0,0,1,2,2v3a2,2,0,0,1,-2,2A18,18,0,0,1,2,4a2,2,0,0,1,2,-2h3a2,2,0,0,1,2,2v3.01a2,2,0,0,1,-.8,1.598l-.468,.35a1,1,0,0,0,-.288,1.201a14.9,14.9,0,0,0,6.076,6.421Z"/></svg>`;
+
+function linkifyPhoneNumbers(html) {
+  const phoneRegex = /(\+\d{1,3}\s?(?:\(0\))?(?:[\s.-]?\d){6,14})/g;
+
+  const parts = html.split(/(<[^>]+>)/g);
+
+  return parts
+    .map((part) => {
+      if (part.startsWith('<')) return part;
+
+      return part.replace(phoneRegex, (match) => {
+        const telHref = match.replace(/\(0\)/g, '').replace(/[^\d+]/g, '');
+        return `<a href="tel:${telHref}" class="inline-flex items-center gap-1">${PHONE_ICON}${match}</a>`;
+      });
+    })
+    .join('');
+}
+
+export const ImportsItem = ({ item }) => {
+    const descricaoComLinks = useMemo(
+        () => (item.descricao ? linkifyPhoneNumbers(item.descricao) : ''),
+        [item.descricao]
+    );
 
     return (
-        <article
-            className="mb-12 lg:mb-20 last:mb-0"
-            aria-labelledby={`imports-item-title-${item.id}`}
-        >
-            <div className="container max-w-large">
-                <div className={`grid grid-cols-1 items-center gap-6 md:gap-12 lg:gap-16 ${reversed ? 'md:grid-cols-[1.15fr_1fr]' : 'md:grid-cols-[0.85fr_1.3fr]'}`}>
-                    <Reveal
-                        direction={reversed ? 'right' : 'left'}
-                        className={`w-full py-2 ${reversed ? 'md:order-2 md:pr-8 lg:pr-16' : 'md:pl-8 lg:pl-14'}`}
-                    >
-                        <h2
-                            id={`imports-item-title-${item.id}`}
-                            className="text-secondary text-2xl lg:text-3xl 2xl:text-4xl font-normal leading-tight uppercase"
-                        >
-                            {item.pais}
-                        </h2>
-                        {item.cidades && (
-                            <p className="text-neutral-800 text-sm lg:text-base 2xl:text-lg mt-1 tracking-wide">
-                                {item.cidades}
-                            </p>
-                        )}
-                        {item.descricao && (
-                            <div
-                                className="font-secondary text-sm lg:text-base 2xl:text-lg text-neutral-700 leading-snug mt-4 [&_p+p]:mt-4"
-                                dangerouslySetInnerHTML={{ __html: item.descricao }}
-                            />
-                        )}
-                    </Reveal>
-
-                    {item.imagem && (
-                        <Reveal
-                            direction={reversed ? 'left' : 'right'}
-                            className={`w-full ${reversed ? 'md:order-1' : ''}`}
-                        >
-                            <img
-                                src={`/content/imports/thumbs/${item.imagem}`}
-                                alt={item.pais || ''}
-                                loading="lazy"
-                                decoding="async"
-                                width="1000"
-                                height="420"
-                                className="w-full aspect-[12/5] object-cover"
-                            />
-                        </Reveal>
-                    )}
-                </div>
-            </div>
+        <article className="min-w-0" aria-labelledby={`imports-item-title-${item.id}`}>
+            <Reveal className="h-full pt-6">
+                <h2
+                    id={`imports-item-title-${item.id}`}
+                    className="flex items-center gap-3 text-secondary text-2xl lg:text-3xl font-normal leading-tight uppercase"
+                >
+                    <CountryFlag country={item.pais} />
+                    <span>{item.pais}</span>
+                </h2>
+                {item.descricao && (
+                    <div
+                        className="font-secondary text-sm lg:text-base text-neutral-700 leading-relaxed mt-4 break-words [&_p+p]:mt-4 [&_a]:underline"
+                        dangerouslySetInnerHTML={{ __html: descricaoComLinks }}
+                    />
+                )}
+            </Reveal>
         </article>
     );
 };

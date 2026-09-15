@@ -38,12 +38,8 @@ class ImportacoesController extends Controller
             ->map(function ($importacao) {
                 return [
                     'id' => $importacao->id,
-                    'imagem' => $importacao->imagem,
                     'pais' => $importacao->importacoesIdiomas->isNotEmpty()
                         ? $importacao->importacoesIdiomas[0]->pais
-                        : null,
-                    'cidades' => $importacao->importacoesIdiomas->isNotEmpty()
-                        ? $importacao->importacoesIdiomas[0]->cidades
                         : null,
                     'descricao' => $importacao->importacoesIdiomas->isNotEmpty()
                         ? $importacao->importacoesIdiomas[0]->descricao

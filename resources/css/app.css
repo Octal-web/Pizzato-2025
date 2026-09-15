@@ -166,3 +166,6 @@ form .admin-select__hidden__indicator-separator {
 form .admin-select__option {
     @apply text-sm;
 }
+form .admin-select__input:focus {
+    @apply ring-0;
+}
