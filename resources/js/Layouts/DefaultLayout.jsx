@@ -472,6 +472,16 @@ const DefaultLayout = ({ children }) => {
                                     </li>
 
                                     <li className="menu-primary-item relative mt-3 2xl:mt-5">
+                                        <Link
+                                            href={route("Importacoes.index")}
+                                            className="menu-primary-link relative text-2xl font-light text-white transition-all hover:font-bold hover:text-secondary 2xl:text-3xl"
+                                            onClick={closeMenu}
+                                        >
+                                            {lang("aoRedorDoMundo")}
+                                        </Link>
+                                    </li>
+
+                                    {/* <li className="menu-primary-item relative mt-3 2xl:mt-5">
                                         <a
                                             href={`${dados_gerais?.link_loja}/blog`}
                                             className="menu-primary-link relative text-2xl font-light text-white transition-all hover:font-bold hover:text-secondary 2xl:text-3xl"
@@ -480,7 +490,7 @@ const DefaultLayout = ({ children }) => {
                                         >
                                             {lang("blog")}
                                         </a>
-                                    </li>
+                                    </li> */}
 
                                     <li className="menu-primary-item relative mt-3 2xl:mt-5">
                                         <a
@@ -723,6 +733,18 @@ const DefaultLayout = ({ children }) => {
                                         >
                                             {lang("contato")}
                                         </Link>
+                                    </li>
+                                    
+                                    <li>
+                                        <a
+                                            href={`${dados_gerais?.link_loja}/blog`}
+                                            className="text-sm font-medium uppercase text-white opacity-100 transition-all hover:opacity-70"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label="Blog - abre em nova aba"
+                                        >
+                                            {lang("blog")}
+                                        </a>
                                     </li>
 
                                     <li>

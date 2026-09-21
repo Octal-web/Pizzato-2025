@@ -65,7 +65,7 @@ export const GeneralData = () => {
             },
             {
                 titulo: "Link Loja Virtual",
-                name: "link_mapa",
+                name: "link_loja",
                 tamanho: "col-span-12 lg:col-span-3",
                 tipo: "texto",
                 max: 200,
@@ -128,6 +128,7 @@ export const GeneralData = () => {
                 >
                     <FontAwesomeIcon
                         icon={isCollapsed ? faChevronDown : faChevronUp}
+                        className="-ml-0.5"
                     />
                 </button>
             </div>

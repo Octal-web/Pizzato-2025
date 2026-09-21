@@ -71,6 +71,7 @@ const translations = {
         linhaAnterior: "Linha anterior",
         proximaLinha: "Próxima linha",
         fecharFiltros: "Fechar filtros",
+        aoRedorDoMundo: "Ao redor do Mundo",
     },
     en: {
         home: 'Home',
@@ -142,6 +143,7 @@ const translations = {
         linhaAnterior: "Previous line",
         proximaLinha: "Next line",
         fecharFiltros: "Close filters",
+        aoRedorDoMundo: "Around the World",
     }
 };
 
