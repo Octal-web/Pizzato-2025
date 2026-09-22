@@ -83,7 +83,6 @@ jobs:
             --exclude=".github/" \
             --exclude=".env" \
             --exclude="public/content/" \
-            --exclude="public/nutri/" \
             --exclude="public/files/" \
             --exclude="public/storage" \
             -e "ssh -p $SSH_PORT" \
