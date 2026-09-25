@@ -809,12 +809,29 @@ const DefaultLayout = ({ children }) => {
                                         <ul className="mb-6 ml-auto mt-2 flex justify-end gap-4">
                                             <li>
                                                 <a
+                                                    href="https://www.kayak.com.br/Bento-Gonçalves.51998.guide"
+                                                    target="_blank"
+                                                    className="block -my-5"
+                                                    
+                                                >
+                                                    <img 
+                                                        alt="Link Kayak"
+                                                        width="24"
+                                                        height="24"
+                                                        className="h-auto w-20"
+                                                        aria-hidden="true"
+                                                        src="https://content.r9cdn.net/frontier/assets/DtXqNGRmbN.png"
+                                                    />
+                                                </a>
+                                            </li>
+                                            
+                                            <li>
+                                                <a
                                                     href={
                                                         dados_gerais?.instagram
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="opacity-70 transition-all hover:opacity-100"
                                                     aria-label="Instagram - abre em nova aba"
                                                 >
                                                     <img
@@ -835,7 +852,6 @@ const DefaultLayout = ({ children }) => {
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="opacity-70 transition-all hover:opacity-100"
                                                     aria-label="Facebook - abre em nova aba"
                                                 >
                                                     <img
@@ -852,7 +868,7 @@ const DefaultLayout = ({ children }) => {
 
                                         <Link
                                             href={route("Perguntas.index")}
-                                            className="mb-5 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
+                                            className="mt-8 mb-2 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
                                         >
                                             {lang("perguntasFrequentes")}
                                         </Link>
@@ -861,7 +877,7 @@ const DefaultLayout = ({ children }) => {
                                             href={route(
                                                 "Politicas.privacidade",
                                             )}
-                                            className="mb-5 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
+                                            className="mb-2 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
                                         >
                                             {lang("politicaPrivacidade")}
                                         </Link>
@@ -870,7 +886,7 @@ const DefaultLayout = ({ children }) => {
                                             href="https://pedidos.pizzato.net:8081/pedidos4/login.asp"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mb-5 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
+                                            className="mb-2 block text-right text-xs text-white opacity-50 transition-all hover:opacity-100"
                                         >
                                             {lang("areaRestrita")}
                                         </a>
@@ -880,7 +896,25 @@ const DefaultLayout = ({ children }) => {
                         </div>
 
                         <div className="hidden md:block">
-                            <ul className="mb-6 ml-auto mt-2 flex justify-end gap-4">
+                            <ul className="mb-6 ml-auto mt-2 flex items-center justify-end gap-4">
+                                <li>
+                                    <a
+                                        href="https://www.kayak.com.br/Bento-Gonçalves.51998.guide"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block -my-4 opacity-70 transition-all hover:opacity-100"
+                                    >
+                                        <img
+                                            width="24"
+                                            height="24"
+                                            className="h-auto w-20"
+                                            src="https://content.r9cdn.net/frontier/assets/DtXqNGRmbN.png"
+                                            alt="Link Kayak"
+                                            aria-hidden="true"
+                                        />
+                                    </a>
+                                </li>
+                                
                                 <li>
                                     <a
                                         href={dados_gerais?.instagram}
