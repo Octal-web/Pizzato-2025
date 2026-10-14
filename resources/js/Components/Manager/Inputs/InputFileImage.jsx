@@ -358,6 +358,14 @@ export const InputFileImage = ({
         };
     }, [selectedFile]);
 
+    useEffect(() => {
+        setShowCurrentImage(true);
+        setSelectedFile(null);
+        setFileExtension(null);
+        setCrop(null);
+        imageRef.current = null;
+    }, [imagem]);
+
     return (
         <div className="mb-6">
             <label className="mb-2 block font-bold text-gray-500">
