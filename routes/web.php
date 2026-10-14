@@ -23,7 +23,7 @@ use App\Http\Controllers\Manager\ImagensController as ManagerImagensController;
 use App\Http\Controllers\Manager\HomeController as ManagerHomeController;
 use App\Http\Controllers\Manager\SlidesController as ManagerSlidesController;
 use App\Http\Controllers\Manager\InstitucionalController as ManagerInstitucionalController;
-use App\Http\Controllers\Manager\TokensController as ManagerTokensController;
+use App\Http\Controllers\Manager\FinderController as ManagerFinderController;
 use App\Http\Controllers\Manager\VinhedosController as ManagerVinhedosController;
 use App\Http\Controllers\Manager\AcontecimentosController as ManagerAcontecimentosController;
 use App\Http\Controllers\Manager\ProdutosController as ManagerProdutosController;
@@ -76,7 +76,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Route::get('lista-de-tokens', [TokensController::class, 'lista'])->name('Tokens.lista');
 
     Route::get('/enoturismo', [EnoturismoController::class, 'index'])->name('Enoturismo.index');
-    
+
     Route::get('/ao-redor-do-mundo', [ImportacoesController::class, 'index'])->name('Importacoes.index');
 
     Route::get('/contato', [ContatoController::class, 'index'])->name('Contato.index');
@@ -300,6 +300,8 @@ Route::prefix('/manager')->group(function () {
         Route::post('/experiencias/adicionar', [ManagerExperienciasController::class, 'novo'])->name('Manager.Experiencias.novo');
         Route::get('/experiencias/editar/{id}', [ManagerExperienciasController::class, 'editar'])->name('Manager.Experiencias.editar');
         Route::post('/experiencias/editar/{id}', [ManagerExperienciasController::class, 'atualizar'])->name('Manager.Experiencias.atualizar');
+
+        Route::post('/enviar-imagem', [ManagerFinderController::class, 'enviar'])->name('Manager.Finder.enviar');
 
 
         Route::get('/contato', [ManagerContatoController::class, 'index'])->name('Manager.Contato.index');
