@@ -57,7 +57,7 @@ const Page = () => {
                     </button>
                 </div>
 
-                {isModalOpen && <ConfirmModal icon={faTrash} closeModal={closeModal} type="delete" confirm={route('Manager.Contato.excluir', {id: newsletter.id})} />}
+                {isModalOpen && <ConfirmModal icon={faTrash} closeModal={closeModal} type="delete" confirm={route('Manager.Newsletter.excluir', {id: newsletter.id})} />}
             </div>
         </AdminLayout>
     );
