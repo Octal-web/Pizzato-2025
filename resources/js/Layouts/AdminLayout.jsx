@@ -175,7 +175,7 @@ const AdminEnologiaLayout = ({ children }) => {
                 </div>
 
                 <aside
-                    className={`menu-aside fixed md:absolute left-0 top-0 z-[2] flex h-full md:h-[calc(100vh-7rem)] w-full md:w-16 md:hover:w-64 flex-col overflow-hidden bg-black md:rounded-xl duration-200 ease-linear lg:fixed lg:translate-x-0 -translate-x-full md:mx-10 md:my-14 shadow-lg${isMobileMenuOpen ? " translate-x-0" : ""}`}
+                    className={`menu-aside fixed md:absolute left-0 top-0 z-40 flex h-full md:h-[calc(100vh-7rem)] w-full md:w-16 md:hover:w-64 flex-col overflow-hidden bg-black md:rounded-xl duration-200 ease-linear lg:fixed lg:translate-x-0 -translate-x-full md:mx-10 md:my-14 shadow-lg${isMobileMenuOpen ? " translate-x-0" : ""}`}
                 >
                     <div className="w-64">
                         <div className="flex items-center justify-between gap-2 px-4">
