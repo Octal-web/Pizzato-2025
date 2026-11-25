@@ -521,7 +521,7 @@ export const InputTipTapEditor = ({
                 <label className="block font-bold text-gray-500">{title}</label>
             </div>
 
-            <div className="border">
+            <div className="border rounded-lg">
                 {/* Toolbars stay pinned while the editor is on screen (top-16 clears the mobile header). */}
                 <div className="sticky top-16 md:top-0 z-20">
                     {/* ── Main toolbar ── */}
