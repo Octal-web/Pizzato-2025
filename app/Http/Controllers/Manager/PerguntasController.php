@@ -102,7 +102,7 @@ class PerguntasController extends Controller
     public function editar($id)
     {
         if (!$id) {
-            return Inertia::location(route('Manager.Perguntas.index'));
+            return redirect()->route('Manager.Perguntas.index', [], 301);
         }
 
         $idiomas = Idioma::query()
@@ -134,7 +134,7 @@ class PerguntasController extends Controller
             ->first();
 
         if (!$pergunta) {
-            return Inertia::location(route('Manager.Perguntas.index'));
+            return redirect()->route('Manager.Perguntas.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -198,7 +198,7 @@ class PerguntasController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Perguntas.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Perguntas.index'));
+                return redirect()->route('Manager.Perguntas.index', [], 301);
             }
 
             if (!$pergunta_idioma) {

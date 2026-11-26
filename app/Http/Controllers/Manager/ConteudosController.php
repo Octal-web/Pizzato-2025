@@ -23,36 +23,39 @@ class ConteudosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function editarAction(Request $request, $id) {
-        if($request->ajax()){
-            $request->validate([
-                'conteudosIdiomas.0.titulo' => $request->exists('conteudosIdiomas.0.titulo') ? 'required' : 'nullable',
-                'conteudosIdiomas.0.subtitulo' => $request->exists('conteudosIdiomas.0.subtitulo') ? 'required' : 'nullable',
-                'conteudosIdiomas.0.texto' => $request->exists('conteudosIdiomas.0.texto') ? 'required' : 'nullable',
-                'conteudosIdiomas.0.link' => $request->exists('conteudosIdiomas.0.link') ? 'required|url' : 'nullable',
-                'conteudosIdiomas.0.video' => $request->exists('conteudosIdiomas.0.video') ? 'required|url' : 'nullable',
-                'img' => $request->hasFile('img') ? 'image|mimes:png,jpg|max:5120' : 'nullable',
-                'img_mobile' => $request->hasFile('img_mobile') ? 'image|mimes:png,jpg|max:5120' : 'nullable',
-                'conteudosIdiomas.0.arq' => $request->exists('conteudosIdiomas.0.arq') ? 'file|mimes:pdf|max:2048' : 'nullable',
-            ],
-            [
-                'conteudosIdiomas.0.titulo.required' => 'Por favor, informe o título.',
-                'conteudosIdiomas.0.subtitulo.required' => 'Por favor, informe o subtítulo.',
-                'conteudosIdiomas.0.texto.required' => 'Por favor, informe o texto.',
-                'conteudosIdiomas.0.link.required' => 'Por favor, informe o link.',
-                'conteudosIdiomas.0.link.url' => 'Por favor, informe um link válido.',
-                'conteudosIdiomas.0.video.required' => 'Por favor, informe o link do vídeo.',
-                'conteudosIdiomas.0.video.url' => 'Por favor, informe um link de vídeo válido.',
-                'img.image' => 'Por favor, selecione uma imagem válida.',
-                'img.mimes' => 'Os formatos de imagem válidos são: JPG e PNG.',
-                'img.max' => 'Por favor, envie um arquivo menor que 5MB.',
-                'img_mobile.image' => 'Por favor, selecione uma imagem mobile válida.',
-                'img_mobile.mimes' => 'Os formatos de imagem mobile válidos são: JPG e PNG.',
-                'img_mobile.max' => 'Por favor, envie um arquivo menor que 5MB.',
-                'conteudosIdiomas.0.arq.file' => 'Por favor, selecione um arquivo válido.',
-                'conteudosIdiomas.0.arq.mimes' => 'O formato de arquivo permitido é .pdf.',
-                'conteudosIdiomas.0.arq.max' => 'O tamanho do arquivo deve ser menor que 2MB.',
-            ]);
+    public function editarAction(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $request->validate(
+                [
+                    'conteudosIdiomas.0.titulo' => $request->exists('conteudosIdiomas.0.titulo') ? 'required' : 'nullable',
+                    'conteudosIdiomas.0.subtitulo' => $request->exists('conteudosIdiomas.0.subtitulo') ? 'required' : 'nullable',
+                    'conteudosIdiomas.0.texto' => $request->exists('conteudosIdiomas.0.texto') ? 'required' : 'nullable',
+                    'conteudosIdiomas.0.link' => $request->exists('conteudosIdiomas.0.link') ? 'required|url' : 'nullable',
+                    'conteudosIdiomas.0.video' => $request->exists('conteudosIdiomas.0.video') ? 'required|url' : 'nullable',
+                    'img' => $request->hasFile('img') ? 'image|mimes:png,jpg|max:5120' : 'nullable',
+                    'img_mobile' => $request->hasFile('img_mobile') ? 'image|mimes:png,jpg|max:5120' : 'nullable',
+                    'conteudosIdiomas.0.arq' => $request->exists('conteudosIdiomas.0.arq') ? 'file|mimes:pdf|max:2048' : 'nullable',
+                ],
+                [
+                    'conteudosIdiomas.0.titulo.required' => 'Por favor, informe o título.',
+                    'conteudosIdiomas.0.subtitulo.required' => 'Por favor, informe o subtítulo.',
+                    'conteudosIdiomas.0.texto.required' => 'Por favor, informe o texto.',
+                    'conteudosIdiomas.0.link.required' => 'Por favor, informe o link.',
+                    'conteudosIdiomas.0.link.url' => 'Por favor, informe um link válido.',
+                    'conteudosIdiomas.0.video.required' => 'Por favor, informe o link do vídeo.',
+                    'conteudosIdiomas.0.video.url' => 'Por favor, informe um link de vídeo válido.',
+                    'img.image' => 'Por favor, selecione uma imagem válida.',
+                    'img.mimes' => 'Os formatos de imagem válidos são: JPG e PNG.',
+                    'img.max' => 'Por favor, envie um arquivo menor que 5MB.',
+                    'img_mobile.image' => 'Por favor, selecione uma imagem mobile válida.',
+                    'img_mobile.mimes' => 'Os formatos de imagem mobile válidos são: JPG e PNG.',
+                    'img_mobile.max' => 'Por favor, envie um arquivo menor que 5MB.',
+                    'conteudosIdiomas.0.arq.file' => 'Por favor, selecione um arquivo válido.',
+                    'conteudosIdiomas.0.arq.mimes' => 'O formato de arquivo permitido é .pdf.',
+                    'conteudosIdiomas.0.arq.max' => 'O tamanho do arquivo deve ser menor que 2MB.',
+                ]
+            );
 
             $conteudo = Conteudo::query()
                 ->where('id', $id)
@@ -66,13 +69,13 @@ class ConteudosController extends Controller
                     'excluido' => null,
                     'conteudo_id' => $conteudo->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -88,20 +91,22 @@ class ConteudosController extends Controller
                 if ($request->ajax()) {
                     return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Home.index'));
+                return redirect()->route('Manager.Home.index', [], 301);
             }
 
             if (!$conteudo_idioma) {
-                $request->validate([
-                    'img' => $conteudo->parametro->habilitar_imagem ? 'required' : 'nullable',
-                    'img_mobile' => $conteudo->parametro->habilitar_imagem_mobile ? 'required' : 'nullable',
-                    'conteudosIdiomas.0.arq' => $conteudo->parametro->habilitar_arquivo ? 'required' : 'nullable',
-                ],
-                [
-                    'img.required' => 'Por favor, selecione uma imagem.',
-                    'img_mobile.required' => 'Por favor, selecione uma imagem mobile.',
-                    'conteudosIdiomas.0.arq.required' => 'Por favor, selecione um arquivo.',
-                ]);
+                $request->validate(
+                    [
+                        'img' => $conteudo->parametro->habilitar_imagem ? 'required' : 'nullable',
+                        'img_mobile' => $conteudo->parametro->habilitar_imagem_mobile ? 'required' : 'nullable',
+                        'conteudosIdiomas.0.arq' => $conteudo->parametro->habilitar_arquivo ? 'required' : 'nullable',
+                    ],
+                    [
+                        'img.required' => 'Por favor, selecione uma imagem.',
+                        'img_mobile.required' => 'Por favor, selecione uma imagem mobile.',
+                        'conteudosIdiomas.0.arq.required' => 'Por favor, selecione um arquivo.',
+                    ]
+                );
 
                 $conteudo_idioma = new ConteudoIdioma;
 
@@ -134,7 +139,7 @@ class ConteudosController extends Controller
             $response = $conteudo_idioma->save();
 
             if ($response) {
-                
+
                 if ($conteudo->parametro->habilitar_img && $request->file('img') && $request->file('img')->getError() == 0) {
 
                     if ($conteudo->imagem && isset($conteudoOriginal) && File::exists('content/display/' . $conteudoOriginal->imagem)) {
@@ -142,7 +147,6 @@ class ConteudosController extends Controller
                     }
 
                     $request->file('img')->move(public_path('content/display/'), $conteudo->imagem);
-                    
                 }
 
 
@@ -161,12 +165,13 @@ class ConteudosController extends Controller
 
                     $request->file('arq')->storeAs('content/files/', $conteudo_idioma->arquivo);
                 }
-               
+
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Registro salvo com sucesso!']);
             }
-        return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
+            return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
         }
-        return Inertia::location(route('Manager.Usuarios.login'));
+
+        return redirect()->route('Manager.Usuarios.login', [], 301);
     }
 
     /**
@@ -176,9 +181,10 @@ class ConteudosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function baixarArquivo($id) {
+    public function baixarArquivo($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Home.index'));
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         $conteudo = Conteudo::query()
@@ -189,7 +195,7 @@ class ConteudosController extends Controller
             ->first();
 
         if (!$conteudo || !$conteudo->parametro->habilitar_arq) {
-            return Inertia::location(route('Manager.Home.index'));
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         return Response::download(File::path('content/files/' . $conteudo->conteudosIdiomas()->first()->arquivo));
@@ -202,8 +208,9 @@ class ConteudosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluirArquivo(Request $request, $id) {
-        if ($request->post()){
+    public function excluirArquivo(Request $request, $id)
+    {
+        if ($request->post()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -225,6 +232,6 @@ class ConteudosController extends Controller
             }
         }
 
-        return Inertia::location(route('Manager.Home.index'));
+        return redirect()->route('Manager.Home.index', [], 301);
     }
 }

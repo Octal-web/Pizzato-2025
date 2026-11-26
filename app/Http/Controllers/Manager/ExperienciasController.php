@@ -26,7 +26,8 @@ class ExperienciasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar() {
+    public function adicionar()
+    {
         return Inertia::render('Manager/Experiencias/adicionar');
     }
 
@@ -36,17 +37,18 @@ class ExperienciasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostExperienceRequest $request) {
-        if($request->ajax()){
+    public function novo(PostExperienceRequest $request)
+    {
+        if ($request->ajax()) {
             $idioma = inertia()->getShared('idioma');
-            
+
             $experiencia = new Experiencia;
             $experiencia_idioma = new ExperienciaIdioma;
 
             $experiencia->imagem = md5(uniqid((string) rand(), true)) . '.' . strtolower($request->file('img')->extension());
-            
+
             $response = $experiencia->save();
-            
+
             $experiencia_idioma->nome = $request->nome;
             $experiencia_idioma->subtitulo = $request->subtitulo;
             $experiencia_idioma->descricao = $request->descricao;
@@ -70,11 +72,12 @@ class ExperienciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Enoturismo.index'));
+            return redirect()->route('Manager.Enoturismo.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -89,26 +92,26 @@ class ExperienciasController extends Controller
             ])
             ->with([
                 'experienciasIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 }
             ])
             ->first();
 
-        if(!$experiencia) {
-            return Inertia::location(route('Manager.Enoturismo.index'));
+        if (!$experiencia) {
+            return redirect()->route('Manager.Enoturismo.index', [], 301);
         }
-    
+
         $idioma = inertia()->getShared('idioma');
-        
+
         $experienciaData = [
             'id' => $experiencia->id,
             'imagem' => rafator('content/experiences/' . $experiencia->imagem),
@@ -131,8 +134,9 @@ class ExperienciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostExperienceRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostExperienceRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $experiencia = Experiencia::query()
                 ->where([
                     'excluido' => null,
@@ -147,13 +151,13 @@ class ExperienciasController extends Controller
                     'excluido' => null,
                     'experiencia_id' => $experiencia->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -169,7 +173,7 @@ class ExperienciasController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Enoturismo.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Enoturismo.index'));
+                return redirect()->route('Manager.Enoturismo.index', [], 301);
             }
 
             if (!$experiencia_idioma) {
@@ -198,7 +202,7 @@ class ExperienciasController extends Controller
                     if ($experiencia->imagem && isset($experienciaOriginal) && File::exists('content/experiences/' . $experienciaOriginal->imagem)) {
                         File::delete('content/experiences/' . $experienciaOriginal->imagem);
                     }
-                    
+
                     $image = $request->file('img')->move(public_path('content/experiences/'), $experiencia->imagem);
                 }
 
@@ -216,8 +220,9 @@ class ExperienciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -246,8 +251,9 @@ class ExperienciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -262,14 +268,13 @@ class ExperienciasController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -284,8 +289,9 @@ class ExperienciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

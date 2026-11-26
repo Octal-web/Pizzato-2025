@@ -28,7 +28,8 @@ class LinhasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $idioma = inertia()->getShared('idioma');
 
         $linhas = Linha::query()
@@ -40,13 +41,13 @@ class LinhasController extends Controller
                     $q->whereHas('idiomas', function ($r) {
                         $r->Where('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->orderBy('ordem', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($linha) {
+            ->map(function ($linha) {
                 return [
                     'id' => $linha->id,
                     'visivel' => $linha->visivel,
@@ -63,20 +64,20 @@ class LinhasController extends Controller
                     $q->whereHas('idiomas', function ($r) {
                         $r->Where('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->orderBy('ordem', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($categoria) {
+            ->map(function ($categoria) {
                 return [
                     'id' => $categoria->id,
                     'visivel' => $categoria->visivel,
                     'nome' => $categoria->categoriasIdiomas->isNotEmpty() ? ($categoria->categoriasIdiomas[0]->tipo ? $categoria->categoriasIdiomas[0]->tipo . ' ' . $categoria->categoriasIdiomas[0]->nome : $categoria->categoriasIdiomas[0]->nome) : null,
                 ];
             });
-            
+
         $volumes = Volume::query()
             ->where([
                 'excluido' => NULL
@@ -84,7 +85,7 @@ class LinhasController extends Controller
             ->orderBy('ordem', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($volume) {
+            ->map(function ($volume) {
                 return [
                     'id' => $volume->id,
                     'visivel' => $volume->visivel,
@@ -98,13 +99,14 @@ class LinhasController extends Controller
             'volumes' => $volumes
         ]);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar() {
+    public function adicionar()
+    {
         return Inertia::render('Manager/Linhas/adicionar');
     }
 
@@ -114,10 +116,11 @@ class LinhasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostLinesRequest $request) {
-        if($request->ajax()){
+    public function novo(PostLinesRequest $request)
+    {
+        if ($request->ajax()) {
             $idioma = inertia()->getShared('idioma');
-            
+
             $linha = new Linha;
             $linha_idioma = new LinhaIdioma;
 
@@ -168,11 +171,12 @@ class LinhasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Linhas.index'));
+            return redirect()->route('Manager.Linhas.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -187,22 +191,22 @@ class LinhasController extends Controller
             ])
             ->with([
                 'linhasIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 }
             ])
             ->first();
 
-        if(!$linha) {
-            return Inertia::location(route('Manager.Linhas.index'));
+        if (!$linha) {
+            return redirect()->route('Manager.Linhas.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -219,7 +223,7 @@ class LinhasController extends Controller
             'titulo_pagina' => count($linha->linhasIdiomas) ? $linha->linhasIdiomas[0]->titulo_pagina : null,
             'descricao_pagina' => count($linha->linhasIdiomas) ? $linha->linhasIdiomas[0]->descricao_pagina : null,
         ];
-        
+
         return Inertia::render('Manager/Linhas/editar', [
             'idiomas' => $idiomas,
             'idioma' => $idioma,
@@ -234,8 +238,9 @@ class LinhasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostLinesRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostLinesRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $linha = Linha::query()
                 ->where([
                     'excluido' => null,
@@ -250,13 +255,13 @@ class LinhasController extends Controller
                     'excluido' => null,
                     'linha_id' => $linha->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -272,7 +277,7 @@ class LinhasController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Linhas.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Linhas.index'));
+                return redirect()->route('Manager.Linhas.index', [], 301);
             }
 
             if (!$linha_idioma) {
@@ -313,7 +318,7 @@ class LinhasController extends Controller
             if ($request->file('img_footer') && $request->file('img_footer')->getError() == 0) {
                 $linha->banner_rodape = md5(uniqid((string) rand(), true)) . '.' . strtolower($request->file('img_footer')->extension());
             }
-            
+
             if ($request->file('img_featured') && $request->file('img_featured')->getError() == 0) {
                 $linha->imagem_destaques = md5(uniqid((string) rand(), true)) . '.' . strtolower($request->file('img_featured')->extension());
             }
@@ -335,7 +340,7 @@ class LinhasController extends Controller
 
                     $image = $request->file('img_logo')->move(public_path('content/lines/logo/'), $linha->logo);
                 }
-                
+
                 if ($request->file('img') && $request->file('img')->getError() == 0) {
                     if ($linha->banner && isset($linhaOriginal) && File::exists('content/lines/banner/' . $linhaOriginal->banner)) {
                         File::delete('content/lines/banner/' . $linhaOriginal->banner);
@@ -359,7 +364,7 @@ class LinhasController extends Controller
 
                     $image = $request->file('img_featured')->move(public_path('content/lines/featureds/'), $linha->imagem_destaques);
                 }
-                
+
                 return to_route('Manager.Linhas.index')->with('message', ['type' => 'success', 'msg' => 'Registro salvo com sucesso!']);
             }
         }
@@ -374,8 +379,9 @@ class LinhasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -404,8 +410,9 @@ class LinhasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -420,14 +427,13 @@ class LinhasController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -442,8 +448,9 @@ class LinhasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

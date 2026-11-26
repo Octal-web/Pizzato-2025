@@ -21,7 +21,8 @@ class ContatoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $idioma = inertia()->getShared('idioma');
 
         $contatos = Contato::query()
@@ -31,7 +32,7 @@ class ContatoController extends Controller
             ->orderBy('criado', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($contato) {
+            ->map(function ($contato) {
                 return [
                     'id' => $contato->id,
                     'nome' => $contato->nome,
@@ -46,7 +47,7 @@ class ContatoController extends Controller
             ->orderBy('criado', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($newsletter) {
+            ->map(function ($newsletter) {
                 return [
                     'id' => $newsletter->id,
                     'nome' => $newsletter->email,
@@ -60,11 +61,12 @@ class ContatoController extends Controller
         ]);
     }
 
-    public function visualizar($id) {
+    public function visualizar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Contato.index'));
+            return redirect()->route('Manager.Contato.index', [], 301);
         }
-        
+
         $idioma = inertia()->getShared('idioma');
 
         $contato = Contato::query()
@@ -74,8 +76,8 @@ class ContatoController extends Controller
             ])
             ->first();
 
-        if(!$contato) {
-            return Inertia::location(route('Manager.Contato.index'));
+        if (!$contato) {
+            return redirect()->route('Manager.Contato.index', [], 301);
         }
 
         $contato = [
@@ -100,8 +102,9 @@ class ContatoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }

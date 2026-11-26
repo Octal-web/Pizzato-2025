@@ -13,11 +13,12 @@ use DeepCopy\DeepCopy;
 
 class NewsletterController extends Controller
 {
-    public function visualizar($id) {
+    public function visualizar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Contato.index'));
+            return redirect()->route('Manager.Contato.index', [], 301);
         }
-        
+
         $newsletter = Newsletter::query()
             ->where([
                 'id' => $id,
@@ -25,8 +26,8 @@ class NewsletterController extends Controller
             ])
             ->first();
 
-        if(!$newsletter) {
-            return Inertia::location(route('Manager.Contato.index'));
+        if (!$newsletter) {
+            return redirect()->route('Manager.Contato.index', [], 301);
         }
 
         $newsletter = [
@@ -47,8 +48,9 @@ class NewsletterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }

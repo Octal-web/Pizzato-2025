@@ -25,11 +25,11 @@ class DetalhesProdutosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id) {
+    public function index($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Produtos.index'));
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
-        
         $idioma = inertia()->getShared('idioma');
 
         $produto = Produto::query()
@@ -42,28 +42,28 @@ class DetalhesProdutosController extends Controller
                     $q->whereHas('idiomas', function ($r) {
                         $r->Where('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 },
-                'detalhes' => function ($q)  {
+                'detalhes' => function ($q) {
                     $q->where([
                         'excluido' => null
                     ])
-                    ->orderBy('ordem', 'ASC')
-                    ->orderBy('id', 'DESC')
-                    ->with([
-                        'detalhesIdiomas' => function ($query) {
-                            $query->whereHas('idiomas', function ($secr) {
-                                $secr->Where('padrao', true);
-                            })
-                            ->orderBy('idioma_id', 'DESC');
-                        },
-                    ]);
+                        ->orderBy('ordem', 'ASC')
+                        ->orderBy('id', 'DESC')
+                        ->with([
+                            'detalhesIdiomas' => function ($query) {
+                                $query->whereHas('idiomas', function ($secr) {
+                                    $secr->Where('padrao', true);
+                                })
+                                    ->orderBy('idioma_id', 'DESC');
+                            },
+                        ]);
                 },
             ])
             ->first();
 
-        if(!$produto) {
-            return Inertia::location(route('Manager.Produtos.index'));
+        if (!$produto) {
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
 
         $produtoData = [
@@ -89,11 +89,12 @@ class DetalhesProdutosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar($id) {
+    public function adicionar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Produtos.index'));
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -112,14 +113,15 @@ class DetalhesProdutosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostProductDetailRequest $request, $id) {
+    public function novo(PostProductDetailRequest $request, $id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Produtos.index'));
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
-        
-        if($request->ajax()){
+
+        if ($request->ajax()) {
             $idioma = inertia()->getShared('idioma');
-            
+
             $detalhe = new Detalhe;
             $detalhe_idioma = new DetalheIdioma;
 
@@ -151,11 +153,12 @@ class DetalhesProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Produtos.index'));
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -170,22 +173,22 @@ class DetalhesProdutosController extends Controller
             ])
             ->with([
                 'detalhesIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 },
             ])
             ->first();
 
-        if(!$detalhe) {
-            return Inertia::location(route('Manager.Produtos.index'));
+        if (!$detalhe) {
+            return redirect()->route('Manager.Produtos.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -212,8 +215,9 @@ class DetalhesProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostProductDetailRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostProductDetailRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $detalhe = Detalhe::query()
                 ->where([
                     'excluido' => null,
@@ -228,13 +232,13 @@ class DetalhesProdutosController extends Controller
                     'excluido' => null,
                     'detalhe_id' => $detalhe->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -250,7 +254,7 @@ class DetalhesProdutosController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Produtos.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Produtos.index'));
+                return redirect()->route('Manager.Produtos.index', [], 301);
             }
 
             if (!$detalhe_idioma) {
@@ -277,7 +281,7 @@ class DetalhesProdutosController extends Controller
                 if ($request->file('img') && $request->file('img')->getError() == 0) {
                     if ($detalhe->icone && isset($detalheOriginal) && File::exists('content/products/details/' . $detalheOriginal->icone)) {
                         File::delete('content/products/details/' . $detalheOriginal->icone);
-                    }               
+                    }
 
                     $image = $request->file('img')->move(public_path('content/products/details/'), $detalhe->icone);
                 }
@@ -296,8 +300,9 @@ class DetalhesProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -326,8 +331,9 @@ class DetalhesProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -342,14 +348,13 @@ class DetalhesProdutosController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -364,8 +369,9 @@ class DetalhesProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

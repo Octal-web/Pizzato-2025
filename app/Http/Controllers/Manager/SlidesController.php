@@ -24,9 +24,10 @@ class SlidesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar($tipo) {
+    public function adicionar($tipo)
+    {
         if (!$tipo || !in_array($tipo, ['imagem', 'video'])) {
-            return Inertia::location(route('Manager.Home.index'));
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         $idiomas = Idioma::query()
@@ -47,14 +48,15 @@ class SlidesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostSlideRequest $request, $tipo) {
-        if($request->ajax()){
+    public function novo(PostSlideRequest $request, $tipo)
+    {
+        if ($request->ajax()) {
             if (!$tipo || !in_array($tipo, ['imagem', 'video'])) {
-                return Inertia::location(route('Manager.Home.index'));
+                return redirect()->route('Manager.Home.index', [], 301);
             }
 
             $idioma = inertia()->getShared('idioma');
-            
+
             $slide = new Slide;
             $slide_idioma = new SlideIdioma;
 
@@ -101,11 +103,12 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Home.index'));
+            return redirect()->route('Manager.Home.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -120,22 +123,22 @@ class SlidesController extends Controller
             ])
             ->with([
                 'slidesIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 },
             ])
             ->first();
 
-        if(!$slide) {
-            return Inertia::location(route('Manager.Home.index'));
+        if (!$slide) {
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -153,7 +156,7 @@ class SlidesController extends Controller
             $slideData['imagem'] = rafator('content/slides/d/' . $slide->imagem);
             $slideData['imagem_mobile'] = rafator('content/slides/m/' . $slide->imagem_mobile);
         }
-        
+
         return Inertia::render('Manager/Slides/editar', [
             'idiomas' => $idiomas,
             'idioma' => $idioma,
@@ -168,8 +171,9 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostSlideRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostSlideRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $slide = Slide::query()
                 ->where([
                     'excluido' => null,
@@ -184,13 +188,13 @@ class SlidesController extends Controller
                     'excluido' => null,
                     'slide_id' => $slide->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -206,7 +210,7 @@ class SlidesController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Home.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Home.index'));
+                return redirect()->route('Manager.Home.index', [], 301);
             }
 
             if (!$slide_idioma) {
@@ -280,7 +284,6 @@ class SlidesController extends Controller
 
                 return to_route('Manager.Home.index')->with('message', ['type' => 'success', 'msg' => 'Registro salvo com sucesso!']);
             }
-
         }
 
         return to_route('Manager.Home.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
@@ -293,8 +296,9 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -323,8 +327,9 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
@@ -339,14 +344,13 @@ class SlidesController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -361,8 +365,9 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {
@@ -397,7 +402,8 @@ class SlidesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function baixarVideo($id, $video) {
+    public function baixarVideo($id, $video)
+    {
         if (!$id || !$video || !in_array($video, ['desktop', 'mobile'])) {
             return redirect()->route('Manager.Home.index');
         }

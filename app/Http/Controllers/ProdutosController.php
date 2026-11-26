@@ -21,7 +21,8 @@ class ProdutosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $idioma = inertia()->getShared('idioma');
 
         $linha = null;
@@ -38,39 +39,39 @@ class ProdutosController extends Controller
                     'linhasIdiomas' => function ($q) use ($idioma) {
                         $q->whereHas('idiomas', function ($r) use ($idioma) {
                             $r->where('codigo', $idioma)
-                              ->orWhere('padrao', true);
+                                ->orWhere('padrao', true);
                         })
-                        ->orderBy('idioma_id', 'DESC');
+                            ->orderBy('idioma_id', 'DESC');
                     },
                     'produtos' => function ($query) use ($idioma) {
                         $query->where([
                             'excluido' => NULL,
                             'visivel' => true
                         ])
-                        ->with([
-                            'produtosIdiomas' => function ($q) use ($idioma) {
-                                $q->whereHas('idiomas', function ($r) use ($idioma) {
-                                    $r->where('codigo', $idioma)
-                                      ->orWhere('padrao', true);
-                                })
-                                ->orderBy('idioma_id', 'DESC');
-                            },
-                            'categoria' => function ($q) use ($idioma) {
-                                $q->with([
-                                    'categoriasIdiomas' => function ($s) use ($idioma) {
-                                        $s->whereHas('idiomas', function ($r) use ($idioma) {
-                                            $r->where('codigo', $idioma)
-                                              ->orWhere('padrao', true);
-                                        })
+                            ->with([
+                                'produtosIdiomas' => function ($q) use ($idioma) {
+                                    $q->whereHas('idiomas', function ($r) use ($idioma) {
+                                        $r->where('codigo', $idioma)
+                                            ->orWhere('padrao', true);
+                                    })
                                         ->orderBy('idioma_id', 'DESC');
-                                    },
-                                ])
-                                ->orderBy('ordem', 'ASC')
-                                ->orderBy('id', 'DESC');
-                            }
-                        ])
-                        ->orderBy('ordem', 'ASC')
-                        ->orderBy('id', 'DESC');
+                                },
+                                'categoria' => function ($q) use ($idioma) {
+                                    $q->with([
+                                        'categoriasIdiomas' => function ($s) use ($idioma) {
+                                            $s->whereHas('idiomas', function ($r) use ($idioma) {
+                                                $r->where('codigo', $idioma)
+                                                    ->orWhere('padrao', true);
+                                            })
+                                                ->orderBy('idioma_id', 'DESC');
+                                        },
+                                    ])
+                                        ->orderBy('ordem', 'ASC')
+                                        ->orderBy('id', 'DESC');
+                                }
+                            ])
+                            ->orderBy('ordem', 'ASC')
+                            ->orderBy('id', 'DESC');
                     }
                 ])
                 ->orderBy('ordem', 'ASC')
@@ -128,39 +129,39 @@ class ProdutosController extends Controller
                     'categoriasIdiomas' => function ($q) use ($idioma) {
                         $q->whereHas('idiomas', function ($r) use ($idioma) {
                             $r->where('codigo', $idioma)
-                              ->orWhere('padrao', true);
+                                ->orWhere('padrao', true);
                         })
-                        ->orderBy('idioma_id', 'DESC');
+                            ->orderBy('idioma_id', 'DESC');
                     },
                     'produtos' => function ($query) use ($idioma) {
                         $query->where([
                             'excluido' => NULL,
                             'visivel' => true
                         ])
-                        ->with([
-                            'produtosIdiomas' => function ($q) use ($idioma) {
-                                $q->whereHas('idiomas', function ($r) use ($idioma) {
-                                    $r->where('codigo', $idioma)
-                                      ->orWhere('padrao', true);
-                                })
-                                ->orderBy('idioma_id', 'DESC');
-                            },
-                            'linha' => function ($q) use ($idioma) {
-                                $q->with([
-                                    'linhasIdiomas' => function ($s) use ($idioma) {
-                                        $s->whereHas('idiomas', function ($r) use ($idioma) {
-                                            $r->where('codigo', $idioma)
-                                              ->orWhere('padrao', true);
-                                        })
+                            ->with([
+                                'produtosIdiomas' => function ($q) use ($idioma) {
+                                    $q->whereHas('idiomas', function ($r) use ($idioma) {
+                                        $r->where('codigo', $idioma)
+                                            ->orWhere('padrao', true);
+                                    })
                                         ->orderBy('idioma_id', 'DESC');
-                                    },
-                                ])
-                                ->orderBy('ordem', 'ASC')
-                                ->orderBy('id', 'DESC');
-                            }
-                        ])
-                        ->orderBy('ordem', 'ASC')
-                        ->orderBy('id', 'DESC');
+                                },
+                                'linha' => function ($q) use ($idioma) {
+                                    $q->with([
+                                        'linhasIdiomas' => function ($s) use ($idioma) {
+                                            $s->whereHas('idiomas', function ($r) use ($idioma) {
+                                                $r->where('codigo', $idioma)
+                                                    ->orWhere('padrao', true);
+                                            })
+                                                ->orderBy('idioma_id', 'DESC');
+                                        },
+                                    ])
+                                        ->orderBy('ordem', 'ASC')
+                                        ->orderBy('id', 'DESC');
+                                }
+                            ])
+                            ->orderBy('ordem', 'ASC')
+                            ->orderBy('id', 'DESC');
                     }
                 ])
                 ->orderBy('ordem', 'ASC')
@@ -214,43 +215,43 @@ class ProdutosController extends Controller
                     'linhasIdiomas' => function ($q) use ($idioma) {
                         $q->whereHas('idiomas', function ($r) use ($idioma) {
                             $r->where('codigo', $idioma)
-                              ->orWhere('padrao', true);
+                                ->orWhere('padrao', true);
                         })
-                        ->orderBy('idioma_id', 'DESC');
+                            ->orderBy('idioma_id', 'DESC');
                     },
                     'produtos' => function ($query) use ($idioma) {
                         $query->where([
                             'excluido' => NULL,
                             'visivel' => true
                         ])
-                        ->with([
-                            'produtosIdiomas' => function ($q) use ($idioma) {
-                                $q->whereHas('idiomas', function ($r) use ($idioma) {
-                                    $r->where('codigo', $idioma)
-                                      ->orWhere('padrao', true);
-                                })
-                                ->orderBy('idioma_id', 'DESC');
-                            },
-                            'categoria' => function ($q) use ($idioma) {
-                                $q->where([
-                                    'excluido' => NULL,
-                                    'visivel' => true
-                                ])
-                                ->with([
-                                    'categoriasIdiomas' => function ($s) use ($idioma) {
-                                        $s->whereHas('idiomas', function ($r) use ($idioma) {
-                                            $r->where('codigo', $idioma)
-                                              ->orWhere('padrao', true);
-                                        })
+                            ->with([
+                                'produtosIdiomas' => function ($q) use ($idioma) {
+                                    $q->whereHas('idiomas', function ($r) use ($idioma) {
+                                        $r->where('codigo', $idioma)
+                                            ->orWhere('padrao', true);
+                                    })
                                         ->orderBy('idioma_id', 'DESC');
-                                    },
-                                ])
-                                ->orderBy('ordem', 'ASC')
-                                ->orderBy('id', 'DESC');
-                            }
-                        ])
-                        ->orderBy('ordem', 'ASC')
-                        ->orderBy('id', 'DESC');
+                                },
+                                'categoria' => function ($q) use ($idioma) {
+                                    $q->where([
+                                        'excluido' => NULL,
+                                        'visivel' => true
+                                    ])
+                                        ->with([
+                                            'categoriasIdiomas' => function ($s) use ($idioma) {
+                                                $s->whereHas('idiomas', function ($r) use ($idioma) {
+                                                    $r->where('codigo', $idioma)
+                                                        ->orWhere('padrao', true);
+                                                })
+                                                    ->orderBy('idioma_id', 'DESC');
+                                            },
+                                        ])
+                                        ->orderBy('ordem', 'ASC')
+                                        ->orderBy('id', 'DESC');
+                                }
+                            ])
+                            ->orderBy('ordem', 'ASC')
+                            ->orderBy('id', 'DESC');
                     }
                 ])
                 ->orderBy('ordem', 'ASC')
@@ -308,15 +309,15 @@ class ProdutosController extends Controller
                 'linhasIdiomas' => function ($q) use ($idioma) {
                     $q->whereHas('idiomas', function ($r) use ($idioma) {
                         $r->where('codigo', $idioma)
-                          ->orWhere('padrao', true);
+                            ->orWhere('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->orderBy('ordem', 'ASC')
             ->orderBy('id', 'DESC')
             ->get()
-            ->map(function($linhaMenu) {
+            ->map(function ($linhaMenu) {
                 return [
                     'id' => $linhaMenu->id,
                     'nome' => $linhaMenu->linhasIdiomas->isNotEmpty() ? $linhaMenu->linhasIdiomas[0]->nome : null,
@@ -332,9 +333,9 @@ class ProdutosController extends Controller
                 'categoriasIdiomas' => function ($q) use ($idioma) {
                     $q->whereHas('idiomas', function ($r) use ($idioma) {
                         $r->where('codigo', $idioma)
-                          ->orWhere('padrao', true);
+                            ->orWhere('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->orderBy('ordem', 'ASC')
@@ -375,7 +376,8 @@ class ProdutosController extends Controller
         ]);
     }
 
-    public function produto($slug) {
+    public function produto($slug)
+    {
         $idioma = inertia()->getShared('idioma');
 
         $produto = Produto::query()
@@ -388,22 +390,22 @@ class ProdutosController extends Controller
                 'produtosIdiomas' => function ($q) use ($idioma) {
                     $q->whereHas('idiomas', function ($r) use ($idioma) {
                         $r->where('codigo', $idioma)
-                        ->orWhere('padrao', true);
+                            ->orWhere('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 },
                 'linha' => function ($q) use ($idioma) {
                     $q->with([
                         'linhasIdiomas' => function ($s) use ($idioma) {
                             $s->whereHas('idiomas', function ($r) use ($idioma) {
                                 $r->where('codigo', $idioma)
-                                  ->orWhere('padrao', true);
+                                    ->orWhere('padrao', true);
                             })
-                            ->orderBy('idioma_id', 'DESC');
+                                ->orderBy('idioma_id', 'DESC');
                         },
                     ])
-                    ->orderBy('ordem', 'ASC')
-                    ->orderBy('id', 'DESC');
+                        ->orderBy('ordem', 'ASC')
+                        ->orderBy('id', 'DESC');
                 },
                 'volumes' => function ($q) {
                     $q->where([
@@ -416,39 +418,39 @@ class ProdutosController extends Controller
                         'excluido' => NULL,
                         'visivel' => true
                     ])
-                    ->with([
-                        'detalhesIdiomas' => function ($s) use ($idioma) {
-                            $s->whereHas('idiomas', function ($r) use ($idioma) {
-                                $r->where('codigo', $idioma)
-                                  ->orWhere('padrao', true);
-                            })
-                            ->orderBy('idioma_id', 'DESC');
-                        },
-                    ])
-                    ->orderBy('ordem', 'ASC')
-                    ->orderBy('id', 'DESC');
+                        ->with([
+                            'detalhesIdiomas' => function ($s) use ($idioma) {
+                                $s->whereHas('idiomas', function ($r) use ($idioma) {
+                                    $r->where('codigo', $idioma)
+                                        ->orWhere('padrao', true);
+                                })
+                                    ->orderBy('idioma_id', 'DESC');
+                            },
+                        ])
+                        ->orderBy('ordem', 'ASC')
+                        ->orderBy('id', 'DESC');
                 },
                 'arquivos' => function ($q) use ($idioma) {
                     $q->where([
                         'excluido' => NULL
                     ])
-                    ->with([
-                        'arquivosIdiomas' => function ($s) use ($idioma) {
-                            $s->whereHas('idiomas', function ($r) use ($idioma) {
-                                $r->where('codigo', $idioma)
-                                  ->orWhere('padrao', true);
-                            })
-                            ->orderBy('idioma_id', 'DESC');
-                        },
-                    ])
-                    ->orderBy('ordem', 'ASC')
-                    ->orderBy('id', 'DESC');
+                        ->with([
+                            'arquivosIdiomas' => function ($s) use ($idioma) {
+                                $s->whereHas('idiomas', function ($r) use ($idioma) {
+                                    $r->where('codigo', $idioma)
+                                        ->orWhere('padrao', true);
+                                })
+                                    ->orderBy('idioma_id', 'DESC');
+                            },
+                        ])
+                        ->orderBy('ordem', 'ASC')
+                        ->orderBy('id', 'DESC');
                 }
             ])
             ->first();
 
-        if(!$produto) {
-            return Inertia::location(route('Produtos.index'));
+        if (!$produto) {
+            return redirect()->route('Produtos.index', [], 301);
         }
 
         $pagina = new Pagina;
@@ -508,7 +510,8 @@ class ProdutosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function download($produto, $id) {
+    public function download($produto, $id)
+    {
         if (!$produto || !$id) {
             return redirect()->route('Manager.Produtos.index');
         }
@@ -530,9 +533,9 @@ class ProdutosController extends Controller
                 'arquivosIdiomas' => function ($q) use ($idioma) {
                     $q->whereHas('idiomas', function ($r) use ($idioma) {
                         $r->where('codigo', $idioma)
-                        ->orWhere('padrao', true);
+                            ->orWhere('padrao', true);
                     })
-                    ->orderBy('idioma_id', 'DESC');
+                        ->orderBy('idioma_id', 'DESC');
                 }
             ])
             ->first();
@@ -548,10 +551,10 @@ class ProdutosController extends Controller
         }
 
         $extensao = pathinfo($caminho, PATHINFO_EXTENSION);
-        
+
         $tituloSlug = Str::slug($arquivo->arquivosIdiomas[0]->titulo ?? 'arquivo');
         $produtoSlug = $arquivo->produto->slug ?? 'produto';
-        
+
         $nomeArquivo = $tituloSlug . '--' . $produtoSlug . '.' . $extensao;
 
         return response()->download($caminho, $nomeArquivo);
