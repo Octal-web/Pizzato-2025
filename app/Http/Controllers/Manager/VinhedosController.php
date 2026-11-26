@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Response;
 use DeepCopy\DeepCopy;
 
 class VinhedosController extends Controller
-{    
+{
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar() {
+    public function adicionar()
+    {
         return Inertia::render('Manager/Vinhedos/adicionar');
     }
 
@@ -36,10 +37,11 @@ class VinhedosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostVineyardRequest $request) {
-        if($request->ajax()){
+    public function novo(PostVineyardRequest $request)
+    {
+        if ($request->ajax()) {
             $idioma = inertia()->getShared('idioma');
-            
+
             $vinhedo = new Vinhedo;
             $vinhedo_idioma = new VinhedoIdioma;
 
@@ -76,11 +78,12 @@ class VinhedosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Institucional.index'));
+            return redirect()->route('Manager.Institucional.index', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -95,22 +98,22 @@ class VinhedosController extends Controller
             ])
             ->with([
                 'vinhedosIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 }
             ])
             ->first();
 
-        if(!$vinhedo) {
-            return Inertia::location(route('Manager.Institucional.index'));
+        if (!$vinhedo) {
+            return redirect()->route('Manager.Institucional.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -127,7 +130,7 @@ class VinhedosController extends Controller
             'clima' => count($vinhedo->vinhedosIdiomas) ? $vinhedo->vinhedosIdiomas[0]->clima : null,
             'arquitetura' => count($vinhedo->vinhedosIdiomas) ? $vinhedo->vinhedosIdiomas[0]->arquitetura : null,
         ];
-        
+
         return Inertia::render('Manager/Vinhedos/editar', [
             'idiomas' => $idiomas,
             'idioma' => $idioma,
@@ -142,8 +145,9 @@ class VinhedosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostVineyardRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostVineyardRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $vinhedo = Vinhedo::query()
                 ->where([
                     'excluido' => null,
@@ -158,13 +162,13 @@ class VinhedosController extends Controller
                     'excluido' => null,
                     'vinhedo_id' => $vinhedo->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -180,7 +184,7 @@ class VinhedosController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Institucional.index')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Institucional.index'));
+                return redirect()->route('Manager.Institucional.index', [], 301);
             }
 
             if (!$vinhedo_idioma) {
@@ -217,15 +221,15 @@ class VinhedosController extends Controller
                     if ($vinhedo->banner && isset($vinhedoOriginal) && File::exists('content/vineyards/banner/d/' . $vinhedoOriginal->banner)) {
                         File::delete('content/vineyards/banner/d/' . $vinhedoOriginal->banner);
                     }
-                    
+
                     $image = $request->file('img')->move(public_path('content/vineyards/banner/d/'), $vinhedo->banner);
                 }
-                
+
                 if ($request->file('img_mobile') && $request->file('img_mobile')->getError() == 0) {
                     if ($vinhedo->banner_mobile && isset($vinhedoOriginal) && File::exists('content/vineyards/banner/m/' . $vinhedoOriginal->banner_mobile)) {
                         File::delete('content/vineyards/banner/m/' . $vinhedoOriginal->banner_mobile);
                     }
-                    
+
                     $image = $request->file('img_mobile')->move(public_path('content/vineyards/banner/m/'), $vinhedo->banner_mobile);
                 }
 
@@ -243,8 +247,9 @@ class VinhedosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -273,8 +278,9 @@ class VinhedosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -289,14 +295,13 @@ class VinhedosController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -311,8 +316,9 @@ class VinhedosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

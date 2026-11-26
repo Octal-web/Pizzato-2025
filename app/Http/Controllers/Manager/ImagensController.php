@@ -22,9 +22,10 @@ class ImagensController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function conteudo($id) {
+    public function conteudo($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Home.index'));
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         $conteudo = Conteudo::query()
@@ -37,20 +38,20 @@ class ImagensController extends Controller
                     $q->where([
                         'excluido' => NULL
                     ])
-                    ->orderBy('ordem', 'ASC')
-                    ->orderBy('id', 'DESC'); 
+                        ->orderBy('ordem', 'ASC')
+                        ->orderBy('id', 'DESC');
                 }
 
             ])
-            ->whereHas('parametro', function($q) {
+            ->whereHas('parametro', function ($q) {
                 $q->where([
                     'galeria' => true,
                 ]);
             })
             ->first();
 
-        if(!$conteudo) {
-            return Inertia::location(route('Manager.Home.index'));
+        if (!$conteudo) {
+            return redirect()->route('Manager.Home.index', [], 301);
         }
 
         $conteudoData = [
@@ -77,20 +78,21 @@ class ImagensController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(Request $request, $id) {
+    public function novo(Request $request, $id)
+    {
         if ($request->ajax()) {
             $conteudo = Conteudo::query()
                 ->where([
                     'excluido' => NULL,
                     'id' => $id
                 ])
-                ->whereHas('parametro', function($q) {
+                ->whereHas('parametro', function ($q) {
                     $q->where(['galeria' => true]);
                 })
                 ->first();
 
             if (!$conteudo) {
-                return Inertia::location(route('Manager.Home.index'));
+                return redirect()->route('Manager.Home.index', [], 301);
             }
 
             foreach ($request->file('images') as $image) {
@@ -124,8 +126,9 @@ class ImagensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -154,8 +157,9 @@ class ImagensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -170,14 +174,13 @@ class ImagensController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -192,8 +195,9 @@ class ImagensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

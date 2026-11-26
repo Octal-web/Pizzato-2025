@@ -15,8 +15,9 @@ class NewsletterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function enviar(PostNewsletterRequest $request) {
-        if($request->post()){
+    public function enviar(PostNewsletterRequest $request)
+    {
+        if ($request->post()) {
             $newsletter = new Newsletter;
 
             $newsletter->email = $request->email;
@@ -24,23 +25,23 @@ class NewsletterController extends Controller
             $response = $newsletter->save();
 
             $response = Http::post('https://api.rd.services/platform/conversions?api_key=' . env('RDSTATION_TOKEN'), [
-                    'event_type' => 'CONVERSION',
-                    'event_family' => 'CDP',
-                    'payload' => [
-                        'conversion_identifier' => $request->form ?? 'form_newsletter',
-                        'name' => $request->nome ?? '',
-                        'email' => $request->email,
-                        'available_for_mailing' => true,
+                'event_type' => 'CONVERSION',
+                'event_family' => 'CDP',
+                'payload' => [
+                    'conversion_identifier' => $request->form ?? 'form_newsletter',
+                    'name' => $request->nome ?? '',
+                    'email' => $request->email,
+                    'available_for_mailing' => true,
 
-                        'legal_bases' => [
-                            [
-                                'category' => 'communications',
-                                'type' => 'consent',
-                                'status' => 'granted',
-                            ],
+                    'legal_bases' => [
+                        [
+                            'category' => 'communications',
+                            'type' => 'consent',
+                            'status' => 'granted',
                         ],
-                    ]
-                ]);
+                    ],
+                ]
+            ]);
 
             if ($response) {
                 $data = [
@@ -61,6 +62,6 @@ class NewsletterController extends Controller
             }
         }
 
-        return Inertia::location(route('Home.index'));
+        return redirect()->route('Home.index', [], 301);
     }
 };

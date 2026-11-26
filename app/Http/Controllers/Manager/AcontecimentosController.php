@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Response;
 use DeepCopy\DeepCopy;
 
 class AcontecimentosController extends Controller
-{    
+{
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar() {
+    public function adicionar()
+    {
         return Inertia::render('Manager/Acontecimentos/adicionar');
     }
 
@@ -36,10 +37,11 @@ class AcontecimentosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostTimelineRequest $request) {
-        if($request->ajax()){
+    public function novo(PostTimelineRequest $request)
+    {
+        if ($request->ajax()) {
             $idioma = inertia()->getShared('idioma');
-            
+
             $acontecimento = new Acontecimento;
             $acontecimento_idioma = new AcontecimentoIdioma;
 
@@ -71,11 +73,12 @@ class AcontecimentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Institucional.historia'));
+            return redirect()->route('Manager.Institucional.historia', [], 301);
         }
-        
+
         $idiomas = Idioma::query()
             ->orderBy('padrao', 'DESC')
             ->orderBy('id', 'DESC')
@@ -90,22 +93,22 @@ class AcontecimentosController extends Controller
             ])
             ->with([
                 'acontecimentosIdiomas' => function ($q) use ($idioma) {
-                    $q->when($idioma, function ($r) use($idioma) {
-                        $r->whereHas('idiomas', function($query) use($idioma) {
+                    $q->when($idioma, function ($r) use ($idioma) {
+                        $r->whereHas('idiomas', function ($query) use ($idioma) {
                             $query->where('codigo', $idioma);
                         });
                     })
-                    ->when(!$idioma, function ($r) {
-                        $r->whereHas('idiomas', function($query) {
-                            $query->where('padrao', true);
+                        ->when(!$idioma, function ($r) {
+                            $r->whereHas('idiomas', function ($query) {
+                                $query->where('padrao', true);
+                            });
                         });
-                    });
                 }
             ])
             ->first();
 
-        if(!$acontecimento) {
-            return Inertia::location(route('Manager.Institucional.historia'));
+        if (!$acontecimento) {
+            return redirect()->route('Manager.Institucional.historia', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -117,7 +120,7 @@ class AcontecimentosController extends Controller
             'titulo' => count($acontecimento->acontecimentosIdiomas) ? $acontecimento->acontecimentosIdiomas[0]->titulo : null,
             'descricao' => count($acontecimento->acontecimentosIdiomas) ? $acontecimento->acontecimentosIdiomas[0]->descricao : null,
         ];
-        
+
         return Inertia::render('Manager/Acontecimentos/editar', [
             'idiomas' => $idiomas,
             'idioma' => $idioma,
@@ -132,8 +135,9 @@ class AcontecimentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostTimelineRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostTimelineRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $acontecimento = Acontecimento::query()
                 ->where([
                     'excluido' => null,
@@ -148,13 +152,13 @@ class AcontecimentosController extends Controller
                     'excluido' => null,
                     'acontecimento_id' => $acontecimento->id
                 ])
-                ->when($idioma, function ($q) use($idioma) {
-                    $q->whereHas('idiomas', function($query) use($idioma) {
+                ->when($idioma, function ($q) use ($idioma) {
+                    $q->whereHas('idiomas', function ($query) use ($idioma) {
                         $query->where('codigo', $idioma);
                     });
                 })
                 ->when(!$idioma, function ($q) {
-                    $q->whereHas('idiomas', function($query) {
+                    $q->whereHas('idiomas', function ($query) {
                         $query->where('padrao', true);
                     });
                 })
@@ -170,7 +174,7 @@ class AcontecimentosController extends Controller
                 if ($request->ajax()) {
                     return to_route('Manager.Institucional.historia')->with('message', ['type' => 'error', 'msg' => 'Não foi possível salvar as informações. Tente novamente mais tarde.']);
                 }
-                return Inertia::location(route('Manager.Institucional.historia'));
+                return redirect()->route('Manager.Institucional.historia', [], 301);
             }
 
             if (!$acontecimento_idioma) {
@@ -183,7 +187,7 @@ class AcontecimentosController extends Controller
                 $acontecimentoOriginal = $copier->copy($acontecimento);
             }
 
-            
+
             $acontecimento->ano = $request->ano;
 
             if ($request->file('img') && $request->file('img')->getError() == 0) {
@@ -201,7 +205,7 @@ class AcontecimentosController extends Controller
                     if ($acontecimento->imagem && isset($acontecimentoOriginal) && File::exists('content/timeline/' . $acontecimentoOriginal->imagem)) {
                         File::delete('content/timeline/' . $acontecimentoOriginal->imagem);
                     }
-                    
+
                     $image = $request->file('img')->move(public_path('content/timeline/'), $acontecimento->imagem);
                 }
 
@@ -219,8 +223,9 @@ class AcontecimentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -249,8 +254,9 @@ class AcontecimentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -265,14 +271,13 @@ class AcontecimentosController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -287,8 +292,9 @@ class AcontecimentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {

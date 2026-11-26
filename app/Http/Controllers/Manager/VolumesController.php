@@ -19,7 +19,8 @@ class VolumesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adicionar() {
+    public function adicionar()
+    {
         return Inertia::render('Manager/Volumes/adicionar');
     }
 
@@ -29,8 +30,9 @@ class VolumesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function novo(PostVolumeRequest $request) {
-        if($request->ajax()){
+    public function novo(PostVolumeRequest $request)
+    {
+        if ($request->ajax()) {
             $volume = new Volume;
 
             $volume->volume = $request->volume;
@@ -49,11 +51,12 @@ class VolumesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id) {
+    public function editar($id)
+    {
         if (!$id) {
-            return Inertia::location(route('Manager.Linhas.index'));
+            return redirect()->route('Manager.Linhas.index', [], 301);
         }
-        
+
         $volume = Volume::query()
             ->where([
                 'excluido' => null,
@@ -61,8 +64,8 @@ class VolumesController extends Controller
             ])
             ->first();
 
-        if(!$volume) {
-            return Inertia::location(route('Manager.Linhas.index'));
+        if (!$volume) {
+            return redirect()->route('Manager.Linhas.index', [], 301);
         }
 
         $idioma = inertia()->getShared('idioma');
@@ -85,8 +88,9 @@ class VolumesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(PostVolumeRequest $request, $id) {
-        if($request->ajax()){
+    public function atualizar(PostVolumeRequest $request, $id)
+    {
+        if ($request->ajax()) {
             $volume = Volume::query()
                 ->where([
                     'excluido' => null,
@@ -117,8 +121,9 @@ class VolumesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function excluir(Request $request, $id) {
-        if ($request->ajax()){
+    public function excluir(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return $request->header('referer');
             }
@@ -147,8 +152,9 @@ class VolumesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function visibilidade(Request $request, $id) {
-        if ($request->ajax()){
+    public function visibilidade(Request $request, $id)
+    {
+        if ($request->ajax()) {
             if (!$id) {
                 return redirect()->back()->with(['type' => 'error', 'message' => 'Registro não encontrado!']);
             }
@@ -163,14 +169,13 @@ class VolumesController extends Controller
             if (!$response) {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Registro não encontrado!']);
             }
-    
+
             $response->visivel = 1 - $response->visivel;
             $response->save();
-    
+
             if ($response) {
                 return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Visibilidade alterada com sucesso!']);
-            }
-            else {
+            } else {
                 return redirect()->back()->with('message', ['type' => 'error', 'msg' => 'Visibilidade não alterada!']);
             }
         }
@@ -185,8 +190,9 @@ class VolumesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordenar(Request $request) {
-        if ($request->ajax()){
+    public function ordenar(Request $request)
+    {
+        if ($request->ajax()) {
             $erros = [];
 
             if ($request->odr && is_array($request->odr)) {
